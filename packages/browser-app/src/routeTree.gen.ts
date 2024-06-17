@@ -19,6 +19,7 @@ import { Route as HeaderSidenavImport } from './routes/_header._sidenav'
 
 // Create Virtual Routes
 
+const LoginLazyImport = createFileRoute('/login')()
 const HeaderSidenavHomeLazyImport = createFileRoute('/_header/_sidenav/home')()
 const HeaderSidenavAboutLazyImport = createFileRoute(
   '/_header/_sidenav/about',
@@ -28,6 +29,11 @@ const HeaderSidenavMenuMenuIdLazyImport = createFileRoute(
 )()
 
 // Create/Update Routes
+
+const LoginLazyRoute = LoginLazyImport.update({
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
 
 const HeaderRoute = HeaderImport.update({
   id: '/_header',
@@ -84,6 +90,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HeaderImport
       parentRoute: typeof rootRoute
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/_header/_sidenav': {
       id: '/_header/_sidenav'
       path: ''
@@ -126,6 +139,7 @@ export const routeTree = rootRoute.addChildren({
       HeaderSidenavMenuMenuIdLazyRoute,
     }),
   }),
+  LoginLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -137,7 +151,8 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/_header"
+        "/_header",
+        "/login"
       ]
     },
     "/": {
@@ -148,6 +163,9 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/_header/_sidenav"
       ]
+    },
+    "/login": {
+      "filePath": "login.lazy.tsx"
     },
     "/_header/_sidenav": {
       "filePath": "_header._sidenav.tsx",

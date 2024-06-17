@@ -16,7 +16,7 @@ function Index() {
 			<h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
 				Vite + React
 			</h1>
-			<Card className="p-12 items-center  flex flex-col space-y-3">
+			<Card className="p-12 items-center flex flex-col space-y-3">
 				<Button onClick={() => setCount((count) => count + 1)}>
 					count is {count}
 				</Button>
