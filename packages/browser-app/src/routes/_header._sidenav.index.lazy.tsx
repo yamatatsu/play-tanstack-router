@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import { Card } from "@/components/ui/card.tsx";
 
-export const Route = createLazyFileRoute("/")({
+export const Route = createLazyFileRoute("/_header/_sidenav/")({
 	component: Index,
 });
 
