@@ -1,2 +1,3 @@
-- [ ] NotFound page
+- [x] NotFound page
+- [ ] highlight current navigation
 - [ ] workspace select page

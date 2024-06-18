@@ -3,9 +3,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 import "@/globals.css";
+import NotFound from "@/components/error-pages/NotFound";
 import { routeTree } from "@/routeTree.gen";
 
-const router = createRouter({ routeTree });
+const router = createRouter({ routeTree, defaultNotFoundComponent: NotFound });
 
 declare module "@tanstack/react-router" {
 	interface Register {
