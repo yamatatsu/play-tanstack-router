@@ -17,7 +17,9 @@ export default function SideNav() {
 function NavItem(props: { label: string; to: string }) {
 	return (
 		<Link to={props.to}>
-			<Button variant="ghost">{props.label}</Button>
+			{({ isActive }) => (
+				<Button variant={isActive ? "default" : "ghost"}>{props.label}</Button>
+			)}
 		</Link>
 	);
 }
