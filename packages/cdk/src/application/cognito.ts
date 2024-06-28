@@ -37,24 +37,7 @@ export class Cognito extends Construct {
 
 		userPool.addClient(`${prefix}UserPoolClient`, {
 			userPoolClientName: `${prefix}Application`,
-			authFlows: {
-				userSrp: true,
-			},
-			oAuth: {
-				flows: {
-					implicitCodeGrant: true,
-				},
-				scopes: [
-					cognito.OAuthScope.EMAIL,
-					cognito.OAuthScope.OPENID,
-					cognito.OAuthScope.PROFILE,
-				],
-				callbackUrls: ["http://localhost:3000"],
-				logoutUrls: ["http://localhost:3000"],
-			},
-			supportedIdentityProviders: [
-				cognito.UserPoolClientIdentityProvider.COGNITO,
-			],
+			disableOAuth: true,
 			preventUserExistenceErrors: true,
 			accessTokenValidity: cdk.Duration.minutes(60),
 			idTokenValidity: cdk.Duration.minutes(60),

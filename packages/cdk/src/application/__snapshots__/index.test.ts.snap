@@ -64,27 +64,9 @@ exports[`Snapshot test 1`] = `
     "CognitotestprefixUserPooltestprefixUserPoolClientA455AF53": {
       "Properties": {
         "AccessTokenValidity": 60,
-        "AllowedOAuthFlows": [
-          "implicit",
-        ],
-        "AllowedOAuthFlowsUserPoolClient": true,
-        "AllowedOAuthScopes": [
-          "email",
-          "openid",
-          "profile",
-        ],
-        "CallbackURLs": [
-          "http://localhost:3000",
-        ],
+        "AllowedOAuthFlowsUserPoolClient": false,
         "ClientName": "test-prefixApplication",
-        "ExplicitAuthFlows": [
-          "ALLOW_USER_SRP_AUTH",
-          "ALLOW_REFRESH_TOKEN_AUTH",
-        ],
         "IdTokenValidity": 60,
-        "LogoutURLs": [
-          "http://localhost:3000",
-        ],
         "PreventUserExistenceErrors": "ENABLED",
         "RefreshTokenValidity": 1440,
         "SupportedIdentityProviders": [
