@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button.tsx";
 import { Card } from "@/components/ui/card.tsx";
+import { useIdToken } from "@/components/useIdToken";
 
 export const Route = createLazyFileRoute("/_header/_sidenav/home")({
 	component: Index,
@@ -10,19 +11,20 @@ export const Route = createLazyFileRoute("/_header/_sidenav/home")({
 
 function Index() {
 	const [count, setCount] = useState(0);
+	const idToken = useIdToken();
 
 	return (
-		<div className="container py-8 flex flex-col space-y-8">
+		<div className="container flex flex-col py-8 space-y-8">
 			<h1 className="text-5xl font-extrabold">Vite + React</h1>
-			<Card className="p-12 flex flex-col items-center space-y-3">
+			<Card className="flex flex-col items-center p-12 space-y-3">
 				<Button onClick={() => setCount((count) => count + 1)}>
 					count is {count}
 				</Button>
 				<p>
-					Edit <code>src/App.tsx</code> and save to test HMR
+					Edit <code>src/App.tsx</code>
 				</p>
 			</Card>
-			<p>Click on the Vite and React logos to learn more</p>
+			<p>{idToken}</p>
 		</div>
 	);
 }
