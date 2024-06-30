@@ -10,6 +10,24 @@ exports[`Snapshot test 1`] = `
     },
   },
   "Resources": {
+    "CognitotestprefixGrafanaAdminGroupA13411BC": {
+      "Properties": {
+        "GroupName": "grafana-admin",
+        "UserPoolId": {
+          "Ref": "CognitotestprefixUserPool30525942",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolGroup",
+    },
+    "CognitotestprefixGrafanaEditorGroupB56998CD": {
+      "Properties": {
+        "GroupName": "grafana-editor",
+        "UserPoolId": {
+          "Ref": "CognitotestprefixUserPool30525942",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolGroup",
+    },
     "CognitotestprefixUserPool30525942": {
       "DeletionPolicy": "Delete",
       "Properties": {
@@ -64,9 +82,30 @@ exports[`Snapshot test 1`] = `
     "CognitotestprefixUserPooltestprefixUserPoolClientA455AF53": {
       "Properties": {
         "AccessTokenValidity": 60,
-        "AllowedOAuthFlowsUserPoolClient": false,
+        "AllowedOAuthFlows": [
+          "code",
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": [
+          "openid",
+          "email",
+          "profile",
+          "aws.cognito.signin.user.admin",
+        ],
+        "CallbackURLs": [
+          "http://localhost:5173/",
+        ],
         "ClientName": "test-prefixApplication",
+        "ExplicitAuthFlows": [
+          "ALLOW_USER_PASSWORD_AUTH",
+          "ALLOW_ADMIN_USER_PASSWORD_AUTH",
+          "ALLOW_REFRESH_TOKEN_AUTH",
+        ],
+        "GenerateSecret": false,
         "IdTokenValidity": 60,
+        "LogoutURLs": [
+          "http://localhost:5173/",
+        ],
         "PreventUserExistenceErrors": "ENABLED",
         "RefreshTokenValidity": 1440,
         "SupportedIdentityProviders": [
@@ -82,6 +121,58 @@ exports[`Snapshot test 1`] = `
         },
       },
       "Type": "AWS::Cognito::UserPoolClient",
+    },
+    "CognitotestprefixUserPooltestprefixUserPoolClientGrafana50A5AE73": {
+      "Properties": {
+        "AccessTokenValidity": 60,
+        "AllowedOAuthFlows": [
+          "code",
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": [
+          "openid",
+          "email",
+          "profile",
+          "aws.cognito.signin.user.admin",
+        ],
+        "CallbackURLs": [
+          "http://localhost:3000/login/generic_oauth",
+        ],
+        "ClientName": "test-prefixGrafana",
+        "ExplicitAuthFlows": [
+          "ALLOW_USER_PASSWORD_AUTH",
+          "ALLOW_ADMIN_USER_PASSWORD_AUTH",
+          "ALLOW_REFRESH_TOKEN_AUTH",
+        ],
+        "GenerateSecret": true,
+        "IdTokenValidity": 60,
+        "LogoutURLs": [
+          "http://localhost:3000/login",
+        ],
+        "PreventUserExistenceErrors": "ENABLED",
+        "RefreshTokenValidity": 1440,
+        "SupportedIdentityProviders": [
+          "COGNITO",
+        ],
+        "TokenValidityUnits": {
+          "AccessToken": "minutes",
+          "IdToken": "minutes",
+          "RefreshToken": "minutes",
+        },
+        "UserPoolId": {
+          "Ref": "CognitotestprefixUserPool30525942",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolClient",
+    },
+    "CognitotestprefixUserPooltestprefixUserPoolDomainC999360D": {
+      "Properties": {
+        "Domain": "yamatatsu-grafana-app-boilerplate",
+        "UserPoolId": {
+          "Ref": "CognitotestprefixUserPool30525942",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolDomain",
     },
   },
   "Rules": {

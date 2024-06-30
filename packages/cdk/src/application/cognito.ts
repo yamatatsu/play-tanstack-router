@@ -92,5 +92,14 @@ export class Cognito extends Construct {
 				domainPrefix: "yamatatsu-grafana-app-boilerplate",
 			},
 		});
+
+		new cognito.CfnUserPoolGroup(this, `${prefix}GrafanaAdminGroup`, {
+			groupName: "grafana-admin",
+			userPoolId: userPool.userPoolId,
+		});
+		new cognito.CfnUserPoolGroup(this, `${prefix}GrafanaEditorGroup`, {
+			groupName: "grafana-editor",
+			userPoolId: userPool.userPoolId,
+		});
 	}
 }
