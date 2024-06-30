@@ -37,11 +37,34 @@ export class Cognito extends Construct {
 
 		userPool.addClient(`${prefix}UserPoolClient`, {
 			userPoolClientName: `${prefix}Application`,
-			disableOAuth: true,
+			generateSecret: false,
+			authFlows: {
+				userPassword: true,
+				adminUserPassword: true,
+			},
+			oAuth: {
+				flows: {
+					authorizationCodeGrant: true,
+				},
+				scopes: [
+					cognito.OAuthScope.OPENID,
+					cognito.OAuthScope.EMAIL,
+					cognito.OAuthScope.PROFILE,
+					cognito.OAuthScope.COGNITO_ADMIN,
+				],
+				callbackUrls: ["http://localhost:5173/"],
+				logoutUrls: ["http://localhost:5173/"],
+			},
 			preventUserExistenceErrors: true,
 			accessTokenValidity: cdk.Duration.minutes(60),
 			idTokenValidity: cdk.Duration.minutes(60),
 			refreshTokenValidity: cdk.Duration.days(1),
+		});
+
+		userPool.addDomain(`${prefix}UserPoolDomain`, {
+			cognitoDomain: {
+				domainPrefix: "yamatatsu-grafana-app-boilerplate",
+			},
 		});
 	}
 }

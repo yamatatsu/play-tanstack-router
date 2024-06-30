@@ -16,7 +16,14 @@ export default function GlobalHeader() {
 					</div>
 				</Link>
 			</div>
-			<div className="items-center px-4 py-2">
+			<div className="flex items-center gap-3 px-4 py-2">
+				<Button
+					onClick={() => {
+						window.open("http://localhost:3000/", "_blank");
+					}}
+				>
+					Grafana
+				</Button>
 				<Button
 					onClick={() => {
 						signOut();

@@ -3,7 +3,8 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button.tsx";
 import { Card } from "@/components/ui/card.tsx";
-import { useIdToken } from "@/components/useIdToken";
+import useAuthSession from "@/components/useAuthSession";
+import useAuthUser from "@/components/useAuthUser";
 
 export const Route = createLazyFileRoute("/_header/_sidenav/home")({
 	component: Index,
@@ -11,7 +12,8 @@ export const Route = createLazyFileRoute("/_header/_sidenav/home")({
 
 function Index() {
 	const [count, setCount] = useState(0);
-	const idToken = useIdToken();
+	const session = useAuthSession();
+	const user = useAuthUser();
 
 	return (
 		<div className="container flex flex-col py-8 space-y-8">
@@ -24,7 +26,8 @@ function Index() {
 					Edit <code>src/App.tsx</code>
 				</p>
 			</Card>
-			<p>{idToken}</p>
+			<p>{user?.username}</p>
+			<p>{session?.tokens?.idToken?.toString()}</p>
 		</div>
 	);
 }
