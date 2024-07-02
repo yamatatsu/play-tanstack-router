@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button.tsx";
 
 export default function GlobalHeader() {
 	return (
-		<div className="navbar bg-base-100">
+		<nav className="sticky top-0 w-full shadow-sm bg-base-100 navbar bg-opacity-80 backdrop-blur">
 			<div className="flex-1">
 				<Link to="/">
 					<div className="flex items-center space-x-3">
@@ -47,6 +47,6 @@ export default function GlobalHeader() {
 					</li>
 				</ul>
 			</div>
-		</div>
+		</nav>
 	);
 }

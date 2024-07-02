@@ -1,20 +1,28 @@
-import { Link } from "@tanstack/react-router";
+import { Link, type LinkProps } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 
 import { Button } from "@/components/ui/button.tsx";
 
-export default function SideNav() {
+type Props = {
+	children: ReactNode;
+};
+export default function SideNav({ children }: Props) {
 	return (
-		<nav className="flex flex-col h-screen p-4 space-y-2 border-r-2">
-			<NavItem to="/home" label="Home" />
-			<NavItem to="/menu/1" label="Menu1" />
-			<NavItem to="/menu/2" label="Menu2" />
-			<NavItem to="/menu/3" label="Menu3" />
-			<NavItem to="/about" label="About" />
-		</nav>
+		<div className="flex flex-row justify-center w-full gap-6">
+			<aside className="w-36">
+				<div className="sticky mx-auto top-20">
+					<div className="flex flex-col p-4 space-y-2 ">
+						<NavItem to="/site/$siteId/dashboard" label="Dashboard" />
+						<NavItem to="/site/$siteId/record" label="Record" />
+					</div>
+				</div>
+			</aside>
+			<div className="flex-1 w-full max-w-2xl mx-auto">{children}</div>
+		</div>
 	);
 }
 
-function NavItem(props: { label: string; to: string }) {
+function NavItem(props: { label: string; to: LinkProps["to"] }) {
 	return (
 		<Link to={props.to}>
 			{({ isActive }) => (

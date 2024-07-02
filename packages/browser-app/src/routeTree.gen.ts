@@ -14,34 +14,46 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as SiteSiteIdImport } from './routes/site.$siteId'
+import { Route as SiteSiteIdIndexImport } from './routes/site.$siteId/index'
 
 // Create Virtual Routes
 
-const HomeLazyImport = createFileRoute('/home')()
-const AboutLazyImport = createFileRoute('/about')()
-const MenuMenuIdLazyImport = createFileRoute('/menu/$menuId')()
+const SiteSiteIdRecordLazyImport = createFileRoute('/site/$siteId/record')()
+const SiteSiteIdDashboardLazyImport = createFileRoute(
+  '/site/$siteId/dashboard',
+)()
 
 // Create/Update Routes
-
-const HomeLazyRoute = HomeLazyImport.update({
-  path: '/home',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/home.lazy').then((d) => d.Route))
-
-const AboutLazyRoute = AboutLazyImport.update({
-  path: '/about',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
 
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const MenuMenuIdLazyRoute = MenuMenuIdLazyImport.update({
-  path: '/menu/$menuId',
+const SiteSiteIdRoute = SiteSiteIdImport.update({
+  path: '/site/$siteId',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/menu.$menuId.lazy').then((d) => d.Route))
+} as any)
+
+const SiteSiteIdIndexRoute = SiteSiteIdIndexImport.update({
+  path: '/',
+  getParentRoute: () => SiteSiteIdRoute,
+} as any)
+
+const SiteSiteIdRecordLazyRoute = SiteSiteIdRecordLazyImport.update({
+  path: '/record',
+  getParentRoute: () => SiteSiteIdRoute,
+} as any).lazy(() =>
+  import('./routes/site.$siteId/record.lazy').then((d) => d.Route),
+)
+
+const SiteSiteIdDashboardLazyRoute = SiteSiteIdDashboardLazyImport.update({
+  path: '/dashboard',
+  getParentRoute: () => SiteSiteIdRoute,
+} as any).lazy(() =>
+  import('./routes/site.$siteId/dashboard.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -54,26 +66,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutLazyImport
+    '/site/$siteId': {
+      id: '/site/$siteId'
+      path: '/site/$siteId'
+      fullPath: '/site/$siteId'
+      preLoaderRoute: typeof SiteSiteIdImport
       parentRoute: typeof rootRoute
     }
-    '/home': {
-      id: '/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeLazyImport
-      parentRoute: typeof rootRoute
+    '/site/$siteId/dashboard': {
+      id: '/site/$siteId/dashboard'
+      path: '/dashboard'
+      fullPath: '/site/$siteId/dashboard'
+      preLoaderRoute: typeof SiteSiteIdDashboardLazyImport
+      parentRoute: typeof SiteSiteIdImport
     }
-    '/menu/$menuId': {
-      id: '/menu/$menuId'
-      path: '/menu/$menuId'
-      fullPath: '/menu/$menuId'
-      preLoaderRoute: typeof MenuMenuIdLazyImport
-      parentRoute: typeof rootRoute
+    '/site/$siteId/record': {
+      id: '/site/$siteId/record'
+      path: '/record'
+      fullPath: '/site/$siteId/record'
+      preLoaderRoute: typeof SiteSiteIdRecordLazyImport
+      parentRoute: typeof SiteSiteIdImport
+    }
+    '/site/$siteId/': {
+      id: '/site/$siteId/'
+      path: '/'
+      fullPath: '/site/$siteId/'
+      preLoaderRoute: typeof SiteSiteIdIndexImport
+      parentRoute: typeof SiteSiteIdImport
     }
   }
 }
@@ -82,9 +101,11 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
-  AboutLazyRoute,
-  HomeLazyRoute,
-  MenuMenuIdLazyRoute,
+  SiteSiteIdRoute: SiteSiteIdRoute.addChildren({
+    SiteSiteIdDashboardLazyRoute,
+    SiteSiteIdRecordLazyRoute,
+    SiteSiteIdIndexRoute,
+  }),
 })
 
 /* prettier-ignore-end */
@@ -96,22 +117,31 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/about",
-        "/home",
-        "/menu/$menuId"
+        "/site/$siteId"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/about": {
-      "filePath": "about.lazy.tsx"
+    "/site/$siteId": {
+      "filePath": "site.$siteId.tsx",
+      "children": [
+        "/site/$siteId/dashboard",
+        "/site/$siteId/record",
+        "/site/$siteId/"
+      ]
     },
-    "/home": {
-      "filePath": "home.lazy.tsx"
+    "/site/$siteId/dashboard": {
+      "filePath": "site.$siteId/dashboard.lazy.tsx",
+      "parent": "/site/$siteId"
     },
-    "/menu/$menuId": {
-      "filePath": "menu.$menuId.lazy.tsx"
+    "/site/$siteId/record": {
+      "filePath": "site.$siteId/record.lazy.tsx",
+      "parent": "/site/$siteId"
+    },
+    "/site/$siteId/": {
+      "filePath": "site.$siteId/index.tsx",
+      "parent": "/site/$siteId"
     }
   }
 }

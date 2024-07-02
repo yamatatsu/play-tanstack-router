@@ -2,20 +2,18 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button.tsx";
-import useAuthSession from "@/components/useAuthSession.ts";
 import useAuthUser from "@/components/useAuthUser.ts";
 
-export const Route = createLazyFileRoute("/home")({
+export const Route = createLazyFileRoute("/site/$siteId/dashboard")({
 	component: Index,
 });
 
 function Index() {
 	const [count, setCount] = useState(0);
-	const session = useAuthSession();
 	const user = useAuthUser();
 
 	return (
-		<div className="container flex flex-col py-8 mx-auto space-y-8">
+		<div className="flex flex-col h-screen p-8 mx-auto space-y-8">
 			<h1 className="text-5xl font-extrabold">Vite + React</h1>
 			<div className="shadow-xl card bg-neutral-content w-96">
 				<div className="card-body">
@@ -25,7 +23,6 @@ function Index() {
 				</div>
 			</div>
 			<p>{user?.username}</p>
-			<p>{session?.tokens?.idToken?.toString()}</p>
 		</div>
 	);
 }
