@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button.tsx";
 import useAuthSession from "@/components/useAuthSession.ts";
 import useAuthUser from "@/components/useAuthUser.ts";
 
-export const Route = createLazyFileRoute("/_header/_sidenav/home")({
+export const Route = createLazyFileRoute("/home")({
 	component: Index,
 });
 

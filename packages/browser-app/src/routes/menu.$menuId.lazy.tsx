@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 
-export const Route = createLazyFileRoute("/_header/_sidenav/menu/$menuId")({
+export const Route = createLazyFileRoute("/menu/$menuId")({
 	component: Menu,
 });
 
