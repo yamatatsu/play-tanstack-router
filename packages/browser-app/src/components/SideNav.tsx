@@ -17,7 +17,7 @@ export default function SideNav({ children }: Props) {
 					</div>
 				</div>
 			</aside>
-			<div className="flex-1 w-full max-w-2xl mx-auto">{children}</div>
+			<div className="flex-1 w-full">{children}</div>
 		</div>
 	);
 }
