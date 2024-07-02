@@ -56,7 +56,7 @@ function Main() {
 
 	return (
 		<React.StrictMode>
-			{!user ? "Redirecting..." : <RouterProvider router={router} />}
+			{!user ? "Loading..." : <RouterProvider router={router} />}
 		</React.StrictMode>
 	);
 }
