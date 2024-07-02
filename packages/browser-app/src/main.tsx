@@ -4,8 +4,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 import "@/globals.css";
-import NotFound from "@/components/error-pages/NotFound";
-import useAuth from "@/components/useAuth";
+import NotFound from "@/components/error-pages/NotFound.tsx";
+import useAuth from "@/components/useAuth.ts";
 import { routeTree } from "@/routeTree.gen";
 
 const resourceConfig = {

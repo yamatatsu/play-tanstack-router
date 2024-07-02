@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
 	return (
-		<div className="p-8 flex flex-col gap-y-4">
+		<div className="flex flex-col p-8 gap-y-4">
 			<h1 className="text-5xl font-extrabold">Not found!</h1>
 			<Link to="/">
-				<Button variant="outline">Go home</Button>
+				<Button variant="secondary">Go home</Button>
 			</Link>
 		</div>
 	);

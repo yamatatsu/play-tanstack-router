@@ -18,7 +18,9 @@ function NavItem(props: { label: string; to: string }) {
 	return (
 		<Link to={props.to}>
 			{({ isActive }) => (
-				<Button variant={isActive ? "default" : "ghost"}>{props.label}</Button>
+				<Button variant={isActive ? "secondary" : "ghost"}>
+					{props.label}
+				</Button>
 			)}
 		</Link>
 	);
