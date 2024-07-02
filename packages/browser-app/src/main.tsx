@@ -52,7 +52,8 @@ if (!rootElement?.innerHTML) {
 }
 
 function Main() {
-	const user = useAuth();
+	const { user } = useAuth();
+
 	return (
 		<React.StrictMode>
 			{!user ? "Redirecting..." : <RouterProvider router={router} />}
