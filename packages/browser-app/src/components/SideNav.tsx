@@ -1,7 +1,6 @@
 import { Link, type LinkProps } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "react-daisyui";
 
 type Props = {
 	children: ReactNode;
@@ -26,7 +25,10 @@ function NavItem(props: { label: string; to: LinkProps["to"] }) {
 	return (
 		<Link to={props.to}>
 			{({ isActive }) => (
-				<Button variant={isActive ? "secondary" : "ghost"}>
+				<Button
+					variant={isActive ? "outline" : undefined}
+					color={isActive ? undefined : "ghost"}
+				>
 					{props.label}
 				</Button>
 			)}

@@ -1,8 +1,4 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-
-import { Button } from "@/components/ui/button.tsx";
-import useAuthUser from "@/components/useAuthUser.ts";
 
 export const Route = createLazyFileRoute("/site/$siteId/record")({
 	component: Index,

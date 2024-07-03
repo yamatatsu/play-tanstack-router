@@ -1,28 +1,29 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
+import { Card, Table } from "react-daisyui";
 
 export const Route = createLazyFileRoute("/site/$siteId/dashboard")({
-	component: Index,
+	component: Component,
 });
 
-function Index() {
+function Component() {
 	return (
 		<div className="flex flex-col w-full p-8 gap-y-12">
 			<div className="flex w-full gap-x-3">
-				<Card onClick={() => ({})}>
+				<Card bordered className="w-1/3">
 					<div className="card-body">
 						<div className="card-title">title</div>
 						<div>status</div>
 						<div>metrics</div>
 					</div>
 				</Card>
-				<Card onClick={() => ({})}>
+				<Card bordered className="w-1/3">
 					<div className="card-body">
 						<div className="card-title">title</div>
 						<div>status</div>
 						<div>metrics</div>
 					</div>
 				</Card>
-				<Card onClick={() => ({})}>
+				<Card bordered className="w-1/3">
 					<div className="card-body">
 						<div className="card-title">title</div>
 						<div>status</div>
@@ -31,65 +32,55 @@ function Index() {
 				</Card>
 			</div>
 			<div className="overflow-x-auto">
-				<table className="table">
-					{/* head */}
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>State</th>
-							<th>Updated At</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Point A-1</td>
-							<td>OK</td>
-							<td>2024-07-02 21:24</td>
-						</tr>
-						<tr>
-							<td>Point A-2</td>
-							<td>OK</td>
-							<td>2024-07-02 21:24</td>
-						</tr>
-						<tr>
-							<td>Point B-1</td>
-							<td>OK</td>
-							<td>2024-07-02 21:24</td>
-						</tr>
-						<tr className="bg-warning">
-							<td>Point B-2</td>
-							<td>NG</td>
-							<td>2024-07-02 21:24</td>
-						</tr>
-						<tr>
-							<td>Point C-1</td>
-							<td>OK</td>
-							<td>2024-07-02 21:24</td>
-						</tr>
-						<tr>
-							<td>Point C-2</td>
-							<td>OK</td>
-							<td>2024-07-02 21:24</td>
-						</tr>
-					</tbody>
-				</table>
+				<Table className="table">
+					<Table.Head>
+						<span>Name</span>
+						<span>State</span>
+						<span>Updated At</span>
+					</Table.Head>
+					<Table.Body>
+						<Table.Row>
+							<span>Point A-1</span>
+							<span>OK</span>
+							<span>2024-07-02 21:24</span>
+						</Table.Row>
+						<Table.Row>
+							<span>Point A-2</span>
+							<span>OK</span>
+							<span>2024-07-02 21:24</span>
+						</Table.Row>
+						<Table.Row>
+							<span>Point B-1</span>
+							<span>OK</span>
+							<span>2024-07-02 21:24</span>
+						</Table.Row>
+						<Table.Row className="bg-warning">
+							<span>Point B-2</span>
+							<span>NG</span>
+							<span>2024-07-02 21:24</span>
+						</Table.Row>
+						<Table.Row>
+							<span>Point C-1</span>
+							<span>OK</span>
+							<span>2024-07-02 21:24</span>
+						</Table.Row>
+						<Table.Row>
+							<span>Point C-2</span>
+							<span>OK</span>
+							<span>2024-07-02 21:24</span>
+						</Table.Row>
+					</Table.Body>
+				</Table>
 			</div>
 			<div className="flex w-full gap-x-3">
-				<Card onClick={() => ({})}>
+				<Card bordered className="w-1/2">
 					<div className="card-body">
 						<div className="card-title">title</div>
 						<div>status</div>
 						<div>metrics</div>
 					</div>
 				</Card>
-				<Card onClick={() => ({})}>
-					<div className="card-body">
-						<div className="card-title">title</div>
-						<div>status</div>
-						<div>metrics</div>
-					</div>
-				</Card>
-				<Card onClick={() => ({})}>
+				<Card bordered className="w-1/2">
 					<div className="card-body">
 						<div className="card-title">title</div>
 						<div>status</div>
@@ -98,19 +89,5 @@ function Index() {
 				</Card>
 			</div>
 		</div>
-	);
-}
-
-type CardProps = {
-	onClick: () => void;
-	children: React.ReactNode;
-};
-function Card({ onClick, children }: CardProps) {
-	return (
-		<button type="button" onClick={onClick}>
-			<div className="shadow-sm card-bordered card border-1 w-80">
-				{children}
-			</div>
-		</button>
 	);
 }

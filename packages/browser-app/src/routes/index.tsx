@@ -1,6 +1,7 @@
-import { Button } from "@/components/ui/button";
-import { test_siteId } from "@/constants";
 import { Link, createFileRoute } from "@tanstack/react-router";
+import { Button } from "react-daisyui";
+
+import { test_siteId } from "@/constants";
 
 export const Route = createFileRoute("/")({
 	component: () => {
