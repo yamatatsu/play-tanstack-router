@@ -6,7 +6,7 @@ export const Route = createLazyFileRoute("/site/$siteId/record")({
 
 function Index() {
 	return (
-		<div className="flex flex-col h-screen p-8 mx-auto space-y-8">
+		<div className="flex flex-col p-8 mx-auto">
 			<h1 className="text-5xl font-extrabold">Record</h1>
 		</div>
 	);

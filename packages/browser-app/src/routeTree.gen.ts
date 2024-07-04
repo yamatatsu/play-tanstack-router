@@ -20,8 +20,11 @@ import { Route as SiteSiteIdIndexImport } from './routes/site.$siteId/index'
 // Create Virtual Routes
 
 const SiteSiteIdRecordLazyImport = createFileRoute('/site/$siteId/record')()
-const SiteSiteIdDashboardLazyImport = createFileRoute(
-  '/site/$siteId/dashboard',
+const SiteSiteIdDashboardIndexLazyImport = createFileRoute(
+  '/site/$siteId/dashboard/',
+)()
+const SiteSiteIdDashboardEquipmentStatusLazyImport = createFileRoute(
+  '/site/$siteId/dashboard/equipment-status',
 )()
 
 // Create/Update Routes
@@ -48,12 +51,23 @@ const SiteSiteIdRecordLazyRoute = SiteSiteIdRecordLazyImport.update({
   import('./routes/site.$siteId/record.lazy').then((d) => d.Route),
 )
 
-const SiteSiteIdDashboardLazyRoute = SiteSiteIdDashboardLazyImport.update({
-  path: '/dashboard',
-  getParentRoute: () => SiteSiteIdRoute,
-} as any).lazy(() =>
-  import('./routes/site.$siteId/dashboard.lazy').then((d) => d.Route),
-)
+const SiteSiteIdDashboardIndexLazyRoute =
+  SiteSiteIdDashboardIndexLazyImport.update({
+    path: '/dashboard/',
+    getParentRoute: () => SiteSiteIdRoute,
+  } as any).lazy(() =>
+    import('./routes/site.$siteId/dashboard.index.lazy').then((d) => d.Route),
+  )
+
+const SiteSiteIdDashboardEquipmentStatusLazyRoute =
+  SiteSiteIdDashboardEquipmentStatusLazyImport.update({
+    path: '/dashboard/equipment-status',
+    getParentRoute: () => SiteSiteIdRoute,
+  } as any).lazy(() =>
+    import('./routes/site.$siteId/dashboard.equipment-status.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 // Populate the FileRoutesByPath interface
 
@@ -73,13 +87,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiteSiteIdImport
       parentRoute: typeof rootRoute
     }
-    '/site/$siteId/dashboard': {
-      id: '/site/$siteId/dashboard'
-      path: '/dashboard'
-      fullPath: '/site/$siteId/dashboard'
-      preLoaderRoute: typeof SiteSiteIdDashboardLazyImport
-      parentRoute: typeof SiteSiteIdImport
-    }
     '/site/$siteId/record': {
       id: '/site/$siteId/record'
       path: '/record'
@@ -94,6 +101,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiteSiteIdIndexImport
       parentRoute: typeof SiteSiteIdImport
     }
+    '/site/$siteId/dashboard/equipment-status': {
+      id: '/site/$siteId/dashboard/equipment-status'
+      path: '/dashboard/equipment-status'
+      fullPath: '/site/$siteId/dashboard/equipment-status'
+      preLoaderRoute: typeof SiteSiteIdDashboardEquipmentStatusLazyImport
+      parentRoute: typeof SiteSiteIdImport
+    }
+    '/site/$siteId/dashboard/': {
+      id: '/site/$siteId/dashboard/'
+      path: '/dashboard'
+      fullPath: '/site/$siteId/dashboard'
+      preLoaderRoute: typeof SiteSiteIdDashboardIndexLazyImport
+      parentRoute: typeof SiteSiteIdImport
+    }
   }
 }
 
@@ -102,9 +123,10 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
   SiteSiteIdRoute: SiteSiteIdRoute.addChildren({
-    SiteSiteIdDashboardLazyRoute,
     SiteSiteIdRecordLazyRoute,
     SiteSiteIdIndexRoute,
+    SiteSiteIdDashboardEquipmentStatusLazyRoute,
+    SiteSiteIdDashboardIndexLazyRoute,
   }),
 })
 
@@ -126,14 +148,11 @@ export const routeTree = rootRoute.addChildren({
     "/site/$siteId": {
       "filePath": "site.$siteId.tsx",
       "children": [
-        "/site/$siteId/dashboard",
         "/site/$siteId/record",
-        "/site/$siteId/"
+        "/site/$siteId/",
+        "/site/$siteId/dashboard/equipment-status",
+        "/site/$siteId/dashboard/"
       ]
-    },
-    "/site/$siteId/dashboard": {
-      "filePath": "site.$siteId/dashboard.lazy.tsx",
-      "parent": "/site/$siteId"
     },
     "/site/$siteId/record": {
       "filePath": "site.$siteId/record.lazy.tsx",
@@ -141,6 +160,14 @@ export const routeTree = rootRoute.addChildren({
     },
     "/site/$siteId/": {
       "filePath": "site.$siteId/index.tsx",
+      "parent": "/site/$siteId"
+    },
+    "/site/$siteId/dashboard/equipment-status": {
+      "filePath": "site.$siteId/dashboard.equipment-status.lazy.tsx",
+      "parent": "/site/$siteId"
+    },
+    "/site/$siteId/dashboard/": {
+      "filePath": "site.$siteId/dashboard.index.lazy.tsx",
       "parent": "/site/$siteId"
     }
   }
