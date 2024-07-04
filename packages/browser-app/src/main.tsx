@@ -15,7 +15,7 @@ const resourceConfig = {
 			userPoolClientId: import.meta.env.VITE_USER_POOL_CLIENT_ID,
 			loginWith: {
 				oauth: {
-					domain: `${import.meta.env.VITE_USER_POOL_DOMAIN}.auth.${import.meta.env.VITE_AWS_REGION}.amazoncognito.com`,
+					domain: import.meta.env.VITE_USER_POOL_DOMAIN,
 					scopes: [
 						"openid",
 						"email",
