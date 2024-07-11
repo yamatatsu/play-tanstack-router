@@ -1,0 +1,183 @@
+{
+	"annotations": {
+		"list": [
+			{
+				"builtIn": 1,
+				"datasource": {
+					"type": "grafana",
+					"uid": "-- Grafana --"
+				},
+				"enable": true,
+				"hide": true,
+				"iconColor": "rgba(0, 211, 255, 1)",
+				"name": "Annotations & Alerts",
+				"type": "dashboard"
+			}
+		]
+	},
+	"editable": true,
+	"fiscalYearStartMonth": 0,
+	"graphTooltip": 0,
+	"id": 1,
+	"links": [],
+	"panels": [
+		{
+			"datasource": {
+				"type": "mysql",
+				"uid": "P211906C1C32DB77E"
+			},
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 0,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "linear",
+						"lineWidth": 1,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"displayName": "${__field.labels.equipmentName}",
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					},
+					"unit": "celsius"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 8,
+				"w": 12,
+				"x": 0,
+				"y": 0
+			},
+			"id": 1,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
+			},
+			"pluginVersion": "11.1.0",
+			"targets": [
+				{
+					"dataset": "mydb",
+					"datasource": {
+						"type": "mysql",
+						"uid": "P211906C1C32DB77E"
+					},
+					"editorMode": "builder",
+					"format": "table",
+					"rawSql": "SELECT * FROM mydb.plc_data LIMIT 50 ",
+					"refId": "A",
+					"sql": {
+						"columns": [
+							{
+								"parameters": [
+									{
+										"name": "*",
+										"type": "functionParameter"
+									}
+								],
+								"type": "function"
+							}
+						],
+						"groupBy": [
+							{
+								"property": {
+									"type": "string"
+								},
+								"type": "groupBy"
+							}
+						],
+						"limit": 50
+					},
+					"table": "plc_data"
+				}
+			],
+			"title": "Temperature",
+			"transformations": [
+				{
+					"id": "extractFields",
+					"options": {
+						"source": "metrics"
+					}
+				},
+				{
+					"id": "filterFieldsByName",
+					"options": {
+						"include": {
+							"names": ["equipmentName", "timestamp", "temperature"]
+						}
+					}
+				},
+				{
+					"id": "prepareTimeSeries",
+					"options": {
+						"format": "multi"
+					}
+				}
+			],
+			"type": "timeseries"
+		}
+	],
+	"refresh": "",
+	"schemaVersion": 39,
+	"tags": [],
+	"templating": {
+		"list": []
+	},
+	"time": {
+		"from": "2024-07-01T00:00:00.000Z",
+		"to": "2024-07-01T00:40:00.000Z"
+	},
+	"timepicker": {},
+	"timezone": "browser",
+	"title": "New dashboard",
+	"uid": "adrfsiupy7fgga",
+	"version": 1,
+	"weekStart": ""
+}
