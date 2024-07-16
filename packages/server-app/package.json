@@ -6,6 +6,7 @@
 	"scripts": {
 		"dev": "tsx watch --clear-screen=false src/index.ts",
 		"build": "tsup --entry.index ./src/index.ts --clean --format=esm --sourcemap",
+		"start": "node dist/index.js",
 		"type-check": "tsc"
 	},
 	"dependencies": {
@@ -19,5 +20,6 @@
 		"tsx": "^4.16.2",
 		"typescript": "~5.0.0",
 		"vitest": "^1.6.0"
-	}
+	},
+	"packageManager": "pnpm@9.5.0"
 }
