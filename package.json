@@ -2,7 +2,6 @@
 	"name": "play-tanstack-router",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
 	"scripts": {
 		"test": "pnpm -r test:ci",
 		"type-check": "pnpm -r type-check",
@@ -11,9 +10,7 @@
 		"cdk": "pnpm run --filter=cdk cdk",
 		"prepare": "husky"
 	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
+	"license": "MIT",
 	"devDependencies": {
 		"@biomejs/biome": "1.8.0",
 		"husky": "^9.0.11",
