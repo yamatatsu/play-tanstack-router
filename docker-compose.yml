@@ -3,7 +3,7 @@ services:
   grafana:
     image: grafana/grafana:11.1.0
     ports:
-      - '3010:3000'
+      - '3010:3010'
     volumes:
       - ./packages/grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./packages/grafana/provisioning:/etc/grafana/provisioning
@@ -11,7 +11,7 @@ services:
     environment:
       - GF_AUTH_GENERIC_OAUTH_CLIENT_ID=${AUTH_GENERIC_OAUTH_CLIENT_ID}
       - GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET=${AUTH_GENERIC_OAUTH_CLIENT_SECRET}
-      - GF_AUTH_GENERIC_OAUTH_USER_POOL_DOMAIN=${AUTH_GENERIC_OAUTH_USER_POOL_DOMAIN}/oauth2/authorize
+      - GF_AUTH_GENERIC_OAUTH_AUTH_URL=${AUTH_GENERIC_OAUTH_USER_POOL_DOMAIN}/oauth2/authorize
       - GF_AUTH_GENERIC_OAUTH_TOKEN_URL=${AUTH_GENERIC_OAUTH_USER_POOL_DOMAIN}/oauth2/token
       - GF_AUTH_GENERIC_OAUTH_API_URL=${AUTH_GENERIC_OAUTH_USER_POOL_DOMAIN}/oauth2/userInfo
 
