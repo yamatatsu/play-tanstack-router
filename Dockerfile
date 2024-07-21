@@ -23,14 +23,10 @@ CMD [ "pnpm", "start" ]
 
 FROM dev AS server-app-dev
 WORKDIR /usr/src/app/packages/server-app
-RUN rm .env
-ENV DATABASE_URL=postgres://my-username:my-password@db:5432/mydb?sslmode=disable
 RUN pnpm prisma generate
 CMD [ "pnpm", "dev" ]
 
 FROM dev AS plc-fake
 WORKDIR /usr/src/app/packages/server-app
-RUN rm .env
-ENV DATABASE_URL=postgres://my-username:my-password@db:5432/mydb?sslmode=disable
 RUN pnpm prisma generate
 CMD [ "pnpm", "script:plc-fake" ]
