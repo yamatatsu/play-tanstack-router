@@ -56,6 +56,15 @@ services:
       timeout: 1s
       retries: 10
 
+  plc-fake:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: plc-fake
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   postgres-data:
   grafana-config-data:
