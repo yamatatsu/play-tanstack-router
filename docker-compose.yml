@@ -1,4 +1,27 @@
 services:
+
+  server-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: server-app-dev
+    ports:
+      - 3000:3000
+    volumes:
+      - ./packages/server-app/src:/usr/src/app/packages/server-app/src
+    depends_on:
+      db:
+        condition: service_healthy
+
+  plc-fake:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: plc-fake
+    depends_on:
+      db:
+        condition: service_healthy
+
   grafana:
     image: grafana/grafana:11.1.0
     ports:
@@ -55,15 +78,6 @@ services:
       interval: 1s
       timeout: 1s
       retries: 10
-
-  plc-fake:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: plc-fake
-    depends_on:
-      db:
-        condition: service_healthy
 
 volumes:
   postgres-data:
