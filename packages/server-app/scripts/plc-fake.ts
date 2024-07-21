@@ -1,3 +1,6 @@
+/**
+ * This script is used to insert fake data into the database for local environments.
+ */
 import { setTimeout } from "node:timers/promises";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
