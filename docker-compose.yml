@@ -1,5 +1,18 @@
 services:
 
+  browser-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: browser-app-dev
+    ports:
+      - 5173:5173
+    env_file:
+      - ./packages/browser-app/.env.local
+    volumes:
+      - ./packages/browser-app:/usr/src/app/packages/browser-app
+      - /usr/src/app/packages/browser-app/node_modules
+
   server-app:
     build:
       context: .
@@ -10,7 +23,8 @@ services:
     environment:
       DATABASE_URL: postgres://my-username:my-password@db:5432/mydb?sslmode=disable
     volumes:
-      - ./packages/server-app/src:/usr/src/app/packages/server-app/src
+      - ./packages/server-app:/usr/src/app/packages/server-app
+      - /usr/src/app/packages/server-app/node_modules
     depends_on:
       db:
         condition: service_healthy

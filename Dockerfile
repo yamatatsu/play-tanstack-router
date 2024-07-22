@@ -21,6 +21,10 @@ WORKDIR /prod/server-app
 EXPOSE 3000
 CMD [ "pnpm", "start" ]
 
+FROM dev AS browser-app-dev
+WORKDIR /usr/src/app/packages/browser-app
+CMD [ "pnpm", "dev" ]
+
 FROM dev AS server-app-dev
 WORKDIR /usr/src/app/packages/server-app
 RUN pnpm prisma generate
