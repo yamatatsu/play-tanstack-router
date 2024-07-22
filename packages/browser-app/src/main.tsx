@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { Amplify, type ResourcesConfig } from "aws-amplify";
 import React from "react";
@@ -33,6 +34,7 @@ const resourceConfig = {
 
 Amplify.configure(resourceConfig);
 
+const queryClient = new QueryClient();
 const router = createRouter({ routeTree, defaultNotFoundComponent: NotFound });
 
 declare module "@tanstack/react-router" {
@@ -56,7 +58,9 @@ function Main() {
 
 	return (
 		<React.StrictMode>
-			{!user ? "Loading..." : <RouterProvider router={router} />}
+			<QueryClientProvider client={queryClient}>
+				{!user ? "Loading..." : <RouterProvider router={router} />}
+			</QueryClientProvider>
 		</React.StrictMode>
 	);
 }

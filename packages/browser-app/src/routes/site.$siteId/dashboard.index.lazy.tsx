@@ -1,5 +1,12 @@
+import { useQuery } from "@tanstack/react-query";
 import { Link, createLazyFileRoute } from "@tanstack/react-router";
 import { Card, Table } from "react-daisyui";
+
+type PlcData = {
+	timestamp: string;
+	dataName: string;
+	value: number;
+};
 
 export const Route = createLazyFileRoute("/site/$siteId/dashboard/")({
 	component: Component,
@@ -14,13 +21,7 @@ function Component() {
 					to={`/site/${siteId}/dashboard/equipment-status`}
 					className="w-1/3"
 				>
-					<Card bordered className="hover:bg-base-200 h-60">
-						<div className="card-body">
-							<div className="card-title">title</div>
-							<div>status</div>
-							<div>metrics</div>
-						</div>
-					</Card>
+					<DataCard dataName="plc1" />
 				</Link>
 
 				<Link
@@ -39,13 +40,7 @@ function Component() {
 					to={`/site/${siteId}/dashboard/equipment-status`}
 					className="w-1/3"
 				>
-					<Card bordered className="hover:bg-base-200 h-60">
-						<div className="card-body">
-							<div className="card-title">title</div>
-							<div>status</div>
-							<div>metrics</div>
-						</div>
-					</Card>
+					<DataCard dataName="plc2" />
 				</Link>
 			</div>
 			<div className="overflow-x-auto">
@@ -116,5 +111,55 @@ function Component() {
 				</Link>
 			</div>
 		</div>
+	);
+}
+
+function DataCard(props: { dataName: string }) {
+	const { dataName } = props;
+
+	const result = useQuery({
+		queryKey: ["plc-data-latest"],
+		queryFn: async (): Promise<PlcData[]> => {
+			const res = await fetch("http://localhost:3000/plc-data-latest");
+			const data = await res.json();
+			return data.plcData;
+		},
+		refetchInterval: 5_000,
+	});
+
+	if (!result.isSuccess) {
+		return (
+			<Card bordered className="hover:bg-base-200 h-60">
+				<Card.Body>
+					<Card.Title>{dataName}</Card.Title>
+					<div>time: Loading...</div>
+					<div>value: Loading...</div>
+				</Card.Body>
+			</Card>
+		);
+	}
+
+	const data = result.data.find((d) => d.dataName === dataName);
+
+	if (!data) {
+		return (
+			<Card bordered className="hover:bg-base-200 h-60">
+				<Card.Body>
+					<Card.Title>{dataName}</Card.Title>
+					<div>time: No Data</div>
+					<div>value: No Data</div>
+				</Card.Body>
+			</Card>
+		);
+	}
+
+	return (
+		<Card bordered className="hover:bg-base-200 h-60">
+			<Card.Body>
+				<Card.Title>{dataName}</Card.Title>
+				<div>time: {data.timestamp}</div>
+				<div>value: {data.value.toFixed(2)}</div>
+			</Card.Body>
+		</Card>
 	);
 }
