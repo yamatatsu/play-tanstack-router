@@ -1,4 +1,4 @@
-import { type PlcData, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import express from "express";
 const prisma = new PrismaClient();
 
@@ -10,19 +10,13 @@ app.get("/", (_req, res) => {
 });
 
 app.get("/plc-data-latest", async (_req, res) => {
-	const plcDataList = await prisma.plcData.findMany({
+	const plcData = await prisma.plcData.findMany({
+		distinct: ["dataName"],
 		where: { timestamp: { gt: new Date(Date.now() - 10_000) } },
 		orderBy: { timestamp: "desc" },
 	});
 
-	const uniqueList = plcDataList.reduce<PlcData[]>((acc, data) => {
-		if (acc.every((d) => d.dataName !== data.dataName)) {
-			acc.push(data);
-		}
-		return acc;
-	}, []);
-
-	res.json({ plcData: uniqueList });
+	res.json({ plcData: plcData });
 });
 
 app.listen(port, () => {
