@@ -48,13 +48,8 @@ services:
     volumes:
       - ./packages/grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./packages/grafana/provisioning:/etc/grafana/provisioning
+      - grafana-config-data:/var/lib/grafana
     environment:
-      GF_DATABASE_TYPE: postgres
-      GF_DATABASE_HOST: grafana-config:5432
-      GF_DATABASE_NAME: grafana
-      GF_DATABASE_USER: grafana-user
-      GF_DATABASE_PASSWORD: grafana-pass
-      GF_DATABASE_SSL_MODE: disable
       GF_AUTH_GENERIC_OAUTH_CLIENT_ID: ${AUTH_GENERIC_OAUTH_CLIENT_ID}
       GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: ${AUTH_GENERIC_OAUTH_CLIENT_SECRET}
       GF_AUTH_GENERIC_OAUTH_AUTH_URL: ${AUTH_GENERIC_OAUTH_USER_POOL_DOMAIN}/oauth2/authorize
@@ -62,8 +57,6 @@ services:
       GF_AUTH_GENERIC_OAUTH_API_URL: ${AUTH_GENERIC_OAUTH_USER_POOL_DOMAIN}/oauth2/userInfo
     depends_on:
       db:
-        condition: service_healthy
-      grafana-config:
         condition: service_healthy
 
   db:
@@ -78,22 +71,6 @@ services:
       - postgres-data:/var/lib/postgresql/data:delegated
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "my-username", "-d", "mydb"]
-      interval: 1s
-      timeout: 1s
-      retries: 10
-
-  grafana-config:
-    image: postgres:15.7-alpine3.20
-    environment:
-      POSTGRES_DB: grafana
-      POSTGRES_USER: grafana-user
-      POSTGRES_PASSWORD: grafana-pass
-    expose:
-      - "5432"
-    volumes:
-      - grafana-config-data:/var/lib/postgresql/data:delegated
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "grafana-user", "-d", "grafana"]
       interval: 1s
       timeout: 1s
       retries: 10
