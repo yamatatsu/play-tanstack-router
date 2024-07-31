@@ -136,7 +136,7 @@ exports[`Snapshot test 1`] = `
           "aws.cognito.signin.user.admin",
         ],
         "CallbackURLs": [
-          "http://localhost:3010/login/generic_oauth",
+          "http://localhost:3000/login/generic_oauth",
         ],
         "ClientName": "test-prefixGrafana",
         "ExplicitAuthFlows": [
@@ -147,7 +147,7 @@ exports[`Snapshot test 1`] = `
         "GenerateSecret": true,
         "IdTokenValidity": 60,
         "LogoutURLs": [
-          "http://localhost:3010/login",
+          "http://localhost:3000/login",
         ],
         "PreventUserExistenceErrors": "ENABLED",
         "RefreshTokenValidity": 1440,

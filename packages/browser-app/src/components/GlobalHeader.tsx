@@ -22,7 +22,7 @@ export default function GlobalHeader() {
 						<Menu.Details label="Menu">
 							<Menu.Item>
 								<a
-									href="http://localhost:3010/"
+									href="http://localhost:3000/"
 									target="_blank"
 									rel="noreferrer"
 								>

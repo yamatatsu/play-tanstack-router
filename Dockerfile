@@ -18,7 +18,7 @@ RUN pnpm deploy --filter=server-app --prod /prod/server-app
 FROM base AS server-app
 COPY --from=build /prod/server-app /prod/server-app
 WORKDIR /prod/server-app
-EXPOSE 3000
+EXPOSE 8000
 CMD [ "pnpm", "start" ]
 
 FROM dev AS browser-app-dev

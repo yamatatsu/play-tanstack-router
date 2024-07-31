@@ -120,7 +120,7 @@ function DataCard(props: { dataName: string }) {
 	const result = useQuery({
 		queryKey: ["plc-data-latest"],
 		queryFn: async (): Promise<PlcData[]> => {
-			const res = await fetch("http://localhost:3000/plc-data-latest");
+			const res = await fetch("http://localhost:8000/plc-data-latest");
 			const data = await res.json();
 			return data.plcData;
 		},
