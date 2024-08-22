@@ -3,7 +3,7 @@ import { Template } from "aws-cdk-lib/assertions";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as synthetics from "aws-cdk-lib/aws-synthetics";
 import { expect, test, vi } from "vitest";
-import { ApplicationStack } from ".";
+import { BackendStack } from ".";
 
 vi.spyOn(lambda.Code, "fromAsset").mockReturnValue(
 	lambda.Code.fromInline("dummy") as unknown as lambda.AssetCode,
@@ -15,7 +15,7 @@ vi.spyOn(synthetics.Code, "fromAsset").mockReturnValue(
 test("Snapshot test", () => {
 	const app = new cdk.App();
 
-	const stack = new ApplicationStack(app, "Target", {
+	const stack = new BackendStack(app, "Target", {
 		envName: "test",
 		prefix: "test-prefix",
 	});

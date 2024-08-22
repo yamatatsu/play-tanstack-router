@@ -1,12 +1,12 @@
 import * as cdk from "aws-cdk-lib";
-import { ApplicationStack } from "./application";
+import { BackendStack } from "./backend";
 import { ENV_NAME, STACK_ENV } from "./constants";
 
-const prefix = `${ENV_NAME}Boilerplate`;
+const prefix = `${ENV_NAME}Grafana`;
 
 const app = new cdk.App();
 
-new ApplicationStack(app, `${prefix}AppStack`, {
+new BackendStack(app, `${prefix}BackendStack`, {
 	envName: ENV_NAME,
 	prefix,
 	env: STACK_ENV,

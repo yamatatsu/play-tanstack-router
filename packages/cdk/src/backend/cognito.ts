@@ -11,7 +11,7 @@ export class Cognito extends Construct {
 		super(scope, id);
 		const { prefix } = props;
 
-		const userPool = new cognito.UserPool(this, `${prefix}UserPool`, {
+		const userPool = new cognito.UserPool(this, "UserPool", {
 			selfSignUpEnabled: false,
 			signInAliases: {
 				username: false,
@@ -35,7 +35,7 @@ export class Cognito extends Construct {
 			deletionProtection: false,
 		});
 
-		userPool.addClient(`${prefix}UserPoolClient`, {
+		userPool.addClient("UserPoolClient", {
 			userPoolClientName: `${prefix}Application`,
 			generateSecret: false,
 			authFlows: {
@@ -61,7 +61,7 @@ export class Cognito extends Construct {
 			refreshTokenValidity: cdk.Duration.days(1),
 		});
 
-		userPool.addClient(`${prefix}UserPoolClientGrafana`, {
+		userPool.addClient("UserPoolClientGrafana", {
 			userPoolClientName: `${prefix}Grafana`,
 			generateSecret: true,
 			authFlows: {
@@ -87,17 +87,17 @@ export class Cognito extends Construct {
 			refreshTokenValidity: cdk.Duration.days(1),
 		});
 
-		userPool.addDomain(`${prefix}UserPoolDomain`, {
+		userPool.addDomain("UserPoolDomain", {
 			cognitoDomain: {
-				domainPrefix: "yamatatsu-grafana-app-boilerplate",
+				domainPrefix: "yamatatsu-grafana",
 			},
 		});
 
-		new cognito.CfnUserPoolGroup(this, `${prefix}GrafanaAdminGroup`, {
+		new cognito.CfnUserPoolGroup(this, "GrafanaAdminGroup", {
 			groupName: "grafana-admin",
 			userPoolId: userPool.userPoolId,
 		});
-		new cognito.CfnUserPoolGroup(this, `${prefix}GrafanaEditorGroup`, {
+		new cognito.CfnUserPoolGroup(this, "GrafanaEditorGroup", {
 			groupName: "grafana-editor",
 			userPoolId: userPool.userPoolId,
 		});
