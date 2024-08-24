@@ -1,5 +1,6 @@
 {
 	"app": "npx vite-node src/index.ts",
+	"requireApproval": "never",
 	"watch": {
 		"include": ["**"],
 		"exclude": [
