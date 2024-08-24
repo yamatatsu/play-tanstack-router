@@ -3,10 +3,16 @@
 exports[`Snapshot test 1`] = `
 {
   "Outputs": {
-    "BastionHostBastionHostIdC743CBD6": {
+    "AuroraBastionHostBastionHostId41E0EBC0": {
       "Description": "Instance ID of the bastion host. Use this to connect via SSM Session Manager",
       "Value": {
-        "Ref": "BastionHost30F9ED05",
+        "Ref": "AuroraBastionHostC24C6193",
+      },
+    },
+    "DataPutterTestBastionBastionHostId5E151DC3": {
+      "Description": "Instance ID of the bastion host. Use this to connect via SSM Session Manager",
+      "Value": {
+        "Ref": "DataPutterTestBastion56D8C665",
       },
     },
   },
@@ -26,15 +32,15 @@ exports[`Snapshot test 1`] = `
     },
   },
   "Resources": {
-    "Aurora2CBAB212": {
+    "Aurora3FE0D001": {
       "DeletionPolicy": "Delete",
       "Properties": {
         "CopyTagsToSnapshot": true,
         "DBClusterParameterGroupName": {
-          "Ref": "Targetauroraparametersgroup8C918D0B",
+          "Ref": "AuroraAuroraauroraparametersgroupAC543997",
         },
         "DBSubnetGroupName": {
-          "Ref": "AuroraSubnetsC4DF45C9",
+          "Ref": "AuroraSubnets580C9E00",
         },
         "DatabaseName": "mydb",
         "Engine": "aurora-mysql",
@@ -45,7 +51,7 @@ exports[`Snapshot test 1`] = `
             [
               "{{resolve:secretsmanager:",
               {
-                "Ref": "TargetAuroraSecret852055C73fdaad7efa858a3daf9490cf0a702aeb",
+                "Ref": "TargetAuroraSecret2DEF1BBF3fdaad7efa858a3daf9490cf0a702aeb",
               },
               ":SecretString:password::}}",
             ],
@@ -56,7 +62,7 @@ exports[`Snapshot test 1`] = `
         "VpcSecurityGroupIds": [
           {
             "Fn::GetAtt": [
-              "AuroraSecurityGroup3440C66D",
+              "AuroraSecurityGroup467E7067",
               "GroupId",
             ],
           },
@@ -65,91 +71,23 @@ exports[`Snapshot test 1`] = `
       "Type": "AWS::RDS::DBCluster",
       "UpdateReplacePolicy": "Delete",
     },
-    "AuroraSecretAttachmentEAAB0558": {
+    "AuroraAuroraauroraparametersgroupAC543997": {
       "Properties": {
-        "SecretId": {
-          "Ref": "TargetAuroraSecret852055C73fdaad7efa858a3daf9490cf0a702aeb",
-        },
-        "TargetId": {
-          "Ref": "Aurora2CBAB212",
-        },
-        "TargetType": "AWS::RDS::DBCluster",
-      },
-      "Type": "AWS::SecretsManager::SecretTargetAttachment",
-    },
-    "AuroraSecurityGroup3440C66D": {
-      "Properties": {
-        "GroupDescription": "RDS security group",
-        "SecurityGroupEgress": [
-          {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
+        "Description": "Cluster parameter group for aurora-mysql8.0",
+        "Family": "aurora-mysql8.0",
+        "Parameters": {
+          "character_set_client": "utf8mb4",
+          "character_set_server": "utf8mb4",
+          "server_audit_events": "CONNECT,QUERY,TABLE",
+          "server_audit_logging": "1",
         },
       },
-      "Type": "AWS::EC2::SecurityGroup",
+      "Type": "AWS::RDS::DBClusterParameterGroup",
     },
-    "AuroraSecurityGroupfromTargetBastionHostInstanceSecurityGroup57B1C7023306AF6202A9": {
-      "Properties": {
-        "Description": "from TargetBastionHostInstanceSecurityGroup57B1C702:3306",
-        "FromPort": 3306,
-        "GroupId": {
-          "Fn::GetAtt": [
-            "AuroraSecurityGroup3440C66D",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "SourceSecurityGroupId": {
-          "Fn::GetAtt": [
-            "BastionHostInstanceSecurityGroupE75D4274",
-            "GroupId",
-          ],
-        },
-        "ToPort": 3306,
-      },
-      "Type": "AWS::EC2::SecurityGroupIngress",
-    },
-    "AuroraSubnetsC4DF45C9": {
-      "Properties": {
-        "DBSubnetGroupDescription": "Subnets for Aurora database",
-        "SubnetIds": [
-          {
-            "Ref": "VpcIsolatedSubnet1SubnetE48C5737",
-          },
-          {
-            "Ref": "VpcIsolatedSubnet2Subnet16364B91",
-          },
-        ],
-      },
-      "Type": "AWS::RDS::DBSubnetGroup",
-    },
-    "AurorawriterDC5BC759": {
-      "DeletionPolicy": "Delete",
+    "AuroraBastionHostC24C6193": {
       "DependsOn": [
-        "VpcIsolatedSubnet1RouteTableAssociationD300FCBB",
-        "VpcIsolatedSubnet2RouteTableAssociationF7B18CCA",
-      ],
-      "Properties": {
-        "DBClusterIdentifier": {
-          "Ref": "Aurora2CBAB212",
-        },
-        "DBInstanceClass": "db.t3.medium",
-        "Engine": "aurora-mysql",
-        "PromotionTier": 0,
-        "PubliclyAccessible": false,
-      },
-      "Type": "AWS::RDS::DBInstance",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "BastionHost30F9ED05": {
-      "DependsOn": [
-        "BastionHostInstanceRoleDefaultPolicy17347525",
-        "BastionHostInstanceRoleDD3FA5F1",
+        "AuroraBastionHostInstanceRoleDefaultPolicy0B0D2B8A",
+        "AuroraBastionHostInstanceRoleEDA435D4",
       ],
       "Properties": {
         "AvailabilityZone": {
@@ -161,7 +99,7 @@ exports[`Snapshot test 1`] = `
           ],
         },
         "IamInstanceProfile": {
-          "Ref": "BastionHostInstanceProfile770FCA07",
+          "Ref": "AuroraBastionHostInstanceProfileD80005D6",
         },
         "ImageId": {
           "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amikernel510hvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter",
@@ -170,13 +108,13 @@ exports[`Snapshot test 1`] = `
         "SecurityGroupIds": [
           {
             "Fn::GetAtt": [
-              "BastionHostInstanceSecurityGroupE75D4274",
+              "AuroraBastionHostInstanceSecurityGroup3B0F6505",
               "GroupId",
             ],
           },
         ],
         "SubnetId": {
-          "Ref": "VpcPrivateSubnet1Subnet536B997A",
+          "Ref": "VpcPrivateSubnet1Subnet67A4DBCB",
         },
         "Tags": [
           {
@@ -190,17 +128,42 @@ exports[`Snapshot test 1`] = `
       },
       "Type": "AWS::EC2::Instance",
     },
-    "BastionHostInstanceProfile770FCA07": {
+    "AuroraBastionHostInstanceProfileD80005D6": {
       "Properties": {
         "Roles": [
           {
-            "Ref": "BastionHostInstanceRoleDD3FA5F1",
+            "Ref": "AuroraBastionHostInstanceRoleEDA435D4",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "BastionHostInstanceRoleDD3FA5F1": {
+    "AuroraBastionHostInstanceRoleDefaultPolicy0B0D2B8A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ssmmessages:*",
+                "ssm:UpdateInstanceInformation",
+                "ec2messages:*",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "AuroraBastionHostInstanceRoleDefaultPolicy0B0D2B8A",
+        "Roles": [
+          {
+            "Ref": "AuroraBastionHostInstanceRoleEDA435D4",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "AuroraBastionHostInstanceRoleEDA435D4": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -223,34 +186,9 @@ exports[`Snapshot test 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "BastionHostInstanceRoleDefaultPolicy17347525": {
+    "AuroraBastionHostInstanceSecurityGroup3B0F6505": {
       "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "ssmmessages:*",
-                "ssm:UpdateInstanceInformation",
-                "ec2messages:*",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "BastionHostInstanceRoleDefaultPolicy17347525",
-        "Roles": [
-          {
-            "Ref": "BastionHostInstanceRoleDD3FA5F1",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "BastionHostInstanceSecurityGroupE75D4274": {
-      "Properties": {
-        "GroupDescription": "Target/BastionHost/Resource/InstanceSecurityGroup",
+        "GroupDescription": "Target/Aurora/BastionHost/Resource/InstanceSecurityGroup",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -265,10 +203,112 @@ exports[`Snapshot test 1`] = `
           },
         ],
         "VpcId": {
-          "Ref": "Vpc8378EB38",
+          "Ref": "VpcC3027511",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
+    },
+    "AuroraSecretAttachment3E825A9F": {
+      "Properties": {
+        "SecretId": {
+          "Ref": "TargetAuroraSecret2DEF1BBF3fdaad7efa858a3daf9490cf0a702aeb",
+        },
+        "TargetId": {
+          "Ref": "Aurora3FE0D001",
+        },
+        "TargetType": "AWS::RDS::DBCluster",
+      },
+      "Type": "AWS::SecretsManager::SecretTargetAttachment",
+    },
+    "AuroraSecurityGroup467E7067": {
+      "Properties": {
+        "GroupDescription": "RDS security group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "VpcC3027511",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "AuroraSecurityGroupfromTargetAuroraBastionHostInstanceSecurityGroupC43FC1283306185532B5": {
+      "Properties": {
+        "Description": "from TargetAuroraBastionHostInstanceSecurityGroupC43FC128:3306",
+        "FromPort": 3306,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "AuroraSecurityGroup467E7067",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "AuroraBastionHostInstanceSecurityGroup3B0F6505",
+            "GroupId",
+          ],
+        },
+        "ToPort": 3306,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "AuroraSecurityGroupfromTargetDataPutterFargateServiceSecurityGroup11D3FDAA330643589A59": {
+      "Properties": {
+        "Description": "from TargetDataPutterFargateServiceSecurityGroup11D3FDAA:3306",
+        "FromPort": 3306,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "AuroraSecurityGroup467E7067",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "DataPutterFargateServiceSecurityGroup7A418CF0",
+            "GroupId",
+          ],
+        },
+        "ToPort": 3306,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "AuroraSubnets580C9E00": {
+      "Properties": {
+        "DBSubnetGroupDescription": "Subnets for Aurora database",
+        "SubnetIds": [
+          {
+            "Ref": "VpcIsolatedSubnet1SubnetDC3C6AF8",
+          },
+          {
+            "Ref": "VpcIsolatedSubnet2SubnetB479B99C",
+          },
+        ],
+      },
+      "Type": "AWS::RDS::DBSubnetGroup",
+    },
+    "Aurorawriter398FC05B": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "VpcIsolatedSubnet1RouteTableAssociation0FC379C3",
+        "VpcIsolatedSubnet2RouteTableAssociation8E8989F5",
+      ],
+      "Properties": {
+        "DBClusterIdentifier": {
+          "Ref": "Aurora3FE0D001",
+        },
+        "DBInstanceClass": "db.t3.medium",
+        "Engine": "aurora-mysql",
+        "PromotionTier": 0,
+        "PubliclyAccessible": false,
+      },
+      "Type": "AWS::RDS::DBInstance",
+      "UpdateReplacePolicy": "Delete",
     },
     "CognitoGrafanaAdminGroup384FCFDE": {
       "Properties": {
@@ -434,7 +474,519 @@ exports[`Snapshot test 1`] = `
       },
       "Type": "AWS::Cognito::UserPoolDomain",
     },
-    "TargetAuroraSecret852055C73fdaad7efa858a3daf9490cf0a702aeb": {
+    "DataPutterClusterDE29E8BC": {
+      "Type": "AWS::ECS::Cluster",
+    },
+    "DataPutterFargateService8C8E18B2": {
+      "DependsOn": [
+        "DataPutterTaskDefinitionTaskRole40F2F92D",
+      ],
+      "Properties": {
+        "Cluster": {
+          "Ref": "DataPutterClusterDE29E8BC",
+        },
+        "DeploymentConfiguration": {
+          "Alarms": {
+            "AlarmNames": [],
+            "Enable": false,
+            "Rollback": false,
+          },
+          "DeploymentCircuitBreaker": {
+            "Enable": true,
+            "Rollback": false,
+          },
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50,
+        },
+        "DeploymentController": {
+          "Type": "ECS",
+        },
+        "DesiredCount": 1,
+        "EnableECSManagedTags": false,
+        "LaunchType": "FARGATE",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "DataPutterFargateServiceSecurityGroup7A418CF0",
+                  "GroupId",
+                ],
+              },
+            ],
+            "Subnets": [
+              {
+                "Ref": "VpcPrivateSubnet1Subnet67A4DBCB",
+              },
+              {
+                "Ref": "VpcPrivateSubnet2SubnetC8EB537D",
+              },
+            ],
+          },
+        },
+        "TaskDefinition": {
+          "Ref": "DataPutterTaskDefinition563BA3AE",
+        },
+      },
+      "Type": "AWS::ECS::Service",
+    },
+    "DataPutterFargateServiceSecurityGroup7A418CF0": {
+      "DependsOn": [
+        "DataPutterTaskDefinitionTaskRole40F2F92D",
+      ],
+      "Properties": {
+        "GroupDescription": "Target/DataPutter/FargateService/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "VpcC3027511",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "DataPutterTaskDefinition563BA3AE": {
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "DependsOn": [
+              {
+                "Condition": "COMPLETE",
+                "ContainerName": "DBMigration",
+              },
+            ],
+            "Essential": true,
+            "Image": {
+              "Fn::Sub": "\${AWS::AccountId}.dkr.ecr.\${AWS::Region}.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-\${AWS::AccountId}-\${AWS::Region}:a7a59bd1070df1b4ff32240f107aa24c96cb54ff2c3896ca4258106d030a56f3",
+            },
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "DataPutterTaskDefinitionPlcFakeLogGroupB856CE4A",
+                },
+                "awslogs-region": {
+                  "Ref": "AWS::Region",
+                },
+                "awslogs-stream-prefix": "PlcFake",
+              },
+            },
+            "Name": "PlcFake",
+            "Secrets": [
+              {
+                "Name": "DB_HOST",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "AuroraSecretAttachment3E825A9F",
+                      },
+                      ":host::",
+                    ],
+                  ],
+                },
+              },
+              {
+                "Name": "DB_DBNAME",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "AuroraSecretAttachment3E825A9F",
+                      },
+                      ":dbname::",
+                    ],
+                  ],
+                },
+              },
+              {
+                "Name": "DB_USERNAME",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "AuroraSecretAttachment3E825A9F",
+                      },
+                      ":username::",
+                    ],
+                  ],
+                },
+              },
+              {
+                "Name": "DB_PASSWORD",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "AuroraSecretAttachment3E825A9F",
+                      },
+                      ":password::",
+                    ],
+                  ],
+                },
+              },
+            ],
+          },
+          {
+            "Command": [
+              "pnpm",
+              "prisma",
+              "migrate",
+              "deploy",
+            ],
+            "Essential": false,
+            "Image": {
+              "Fn::Sub": "\${AWS::AccountId}.dkr.ecr.\${AWS::Region}.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-\${AWS::AccountId}-\${AWS::Region}:a7a59bd1070df1b4ff32240f107aa24c96cb54ff2c3896ca4258106d030a56f3",
+            },
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "DataPutterTaskDefinitionDBMigrationLogGroupB84EC738",
+                },
+                "awslogs-region": {
+                  "Ref": "AWS::Region",
+                },
+                "awslogs-stream-prefix": "DBMigration",
+              },
+            },
+            "Name": "DBMigration",
+            "ReadonlyRootFilesystem": true,
+            "Secrets": [
+              {
+                "Name": "DB_HOST",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "AuroraSecretAttachment3E825A9F",
+                      },
+                      ":host::",
+                    ],
+                  ],
+                },
+              },
+              {
+                "Name": "DB_DBNAME",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "AuroraSecretAttachment3E825A9F",
+                      },
+                      ":dbname::",
+                    ],
+                  ],
+                },
+              },
+              {
+                "Name": "DB_USERNAME",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "AuroraSecretAttachment3E825A9F",
+                      },
+                      ":username::",
+                    ],
+                  ],
+                },
+              },
+              {
+                "Name": "DB_PASSWORD",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "AuroraSecretAttachment3E825A9F",
+                      },
+                      ":password::",
+                    ],
+                  ],
+                },
+              },
+            ],
+          },
+        ],
+        "Cpu": "256",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "DataPutterTaskDefinitionExecutionRoleCAB2779E",
+            "Arn",
+          ],
+        },
+        "Family": "TargetDataPutterTaskDefinition79B8282B",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE",
+        ],
+        "RuntimePlatform": {
+          "CpuArchitecture": "ARM64",
+        },
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "DataPutterTaskDefinitionTaskRole40F2F92D",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ECS::TaskDefinition",
+    },
+    "DataPutterTaskDefinitionDBMigrationLogGroupB84EC738": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RetentionInDays": 90,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "DataPutterTaskDefinitionExecutionRoleCAB2779E": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "DataPutterTaskDefinitionExecutionRoleDefaultPolicy3B914050": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ecr:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":repository/",
+                    {
+                      "Fn::Sub": "cdk-hnb659fds-container-assets-\${AWS::AccountId}-\${AWS::Region}",
+                    },
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "DataPutterTaskDefinitionPlcFakeLogGroupB856CE4A",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "AuroraSecretAttachment3E825A9F",
+              },
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "DataPutterTaskDefinitionDBMigrationLogGroupB84EC738",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "DataPutterTaskDefinitionExecutionRoleDefaultPolicy3B914050",
+        "Roles": [
+          {
+            "Ref": "DataPutterTaskDefinitionExecutionRoleCAB2779E",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "DataPutterTaskDefinitionPlcFakeLogGroupB856CE4A": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RetentionInDays": 90,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "DataPutterTaskDefinitionTaskRole40F2F92D": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "DataPutterTestBastion56D8C665": {
+      "DependsOn": [
+        "DataPutterTestBastionInstanceRoleDefaultPolicyEFD29050",
+        "DataPutterTestBastionInstanceRoleE0849638",
+      ],
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "IamInstanceProfile": {
+          "Ref": "DataPutterTestBastionInstanceProfile84C6602F",
+        },
+        "ImageId": {
+          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amikernel510hvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
+        "InstanceType": "t3.nano",
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "DataPutterFargateServiceSecurityGroup7A418CF0",
+              "GroupId",
+            ],
+          },
+        ],
+        "SubnetId": {
+          "Ref": "VpcPrivateSubnet1Subnet67A4DBCB",
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "BastionHost",
+          },
+        ],
+        "UserData": {
+          "Fn::Base64": "#!/bin/bash",
+        },
+      },
+      "Type": "AWS::EC2::Instance",
+    },
+    "DataPutterTestBastionInstanceProfile84C6602F": {
+      "Properties": {
+        "Roles": [
+          {
+            "Ref": "DataPutterTestBastionInstanceRoleE0849638",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "DataPutterTestBastionInstanceRoleDefaultPolicyEFD29050": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ssmmessages:*",
+                "ssm:UpdateInstanceInformation",
+                "ec2messages:*",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "DataPutterTestBastionInstanceRoleDefaultPolicyEFD29050",
+        "Roles": [
+          {
+            "Ref": "DataPutterTestBastionInstanceRoleE0849638",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "DataPutterTestBastionInstanceRoleE0849638": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "BastionHost",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "TargetAuroraSecret2DEF1BBF3fdaad7efa858a3daf9490cf0a702aeb": {
       "DeletionPolicy": "Delete",
       "Properties": {
         "Description": {
@@ -458,20 +1010,7 @@ exports[`Snapshot test 1`] = `
       "Type": "AWS::SecretsManager::Secret",
       "UpdateReplacePolicy": "Delete",
     },
-    "Targetauroraparametersgroup8C918D0B": {
-      "Properties": {
-        "Description": "Cluster parameter group for aurora-mysql8.0",
-        "Family": "aurora-mysql8.0",
-        "Parameters": {
-          "character_set_client": "utf8mb4",
-          "character_set_server": "utf8mb4",
-          "server_audit_events": "CONNECT,QUERY,TABLE",
-          "server_audit_logging": "1",
-        },
-      },
-      "Type": "AWS::RDS::DBClusterParameterGroup",
-    },
-    "Vpc8378EB38": {
+    "VpcC3027511": {
       "Properties": {
         "CidrBlock": "10.0.0.0/16",
         "EnableDnsHostnames": true,
@@ -480,49 +1019,49 @@ exports[`Snapshot test 1`] = `
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Target/Vpc",
+            "Value": "Target/Vpc/Vpc",
           },
         ],
       },
       "Type": "AWS::EC2::VPC",
     },
-    "VpcIGWD7BA715C": {
+    "VpcIGW488B0FEB": {
       "Properties": {
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Target/Vpc",
+            "Value": "Target/Vpc/Vpc",
           },
         ],
       },
       "Type": "AWS::EC2::InternetGateway",
     },
-    "VpcIsolatedSubnet1RouteTable4771E3E5": {
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "Target/Vpc/IsolatedSubnet1",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcIsolatedSubnet1RouteTableAssociationD300FCBB": {
+    "VpcIsolatedSubnet1RouteTableAssociation0FC379C3": {
       "Properties": {
         "RouteTableId": {
-          "Ref": "VpcIsolatedSubnet1RouteTable4771E3E5",
+          "Ref": "VpcIsolatedSubnet1RouteTableF057227C",
         },
         "SubnetId": {
-          "Ref": "VpcIsolatedSubnet1SubnetE48C5737",
+          "Ref": "VpcIsolatedSubnet1SubnetDC3C6AF8",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "VpcIsolatedSubnet1SubnetE48C5737": {
+    "VpcIsolatedSubnet1RouteTableF057227C": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Target/Vpc/Vpc/IsolatedSubnet1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "VpcC3027511",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcIsolatedSubnet1SubnetDC3C6AF8": {
       "Properties": {
         "AvailabilityZone": {
           "Fn::Select": [
@@ -545,41 +1084,41 @@ exports[`Snapshot test 1`] = `
           },
           {
             "Key": "Name",
-            "Value": "Target/Vpc/IsolatedSubnet1",
+            "Value": "Target/Vpc/Vpc/IsolatedSubnet1",
           },
         ],
         "VpcId": {
-          "Ref": "Vpc8378EB38",
+          "Ref": "VpcC3027511",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "VpcIsolatedSubnet2RouteTable1D30AF7D": {
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "Target/Vpc/IsolatedSubnet2",
-          },
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcIsolatedSubnet2RouteTableAssociationF7B18CCA": {
+    "VpcIsolatedSubnet2RouteTableAssociation8E8989F5": {
       "Properties": {
         "RouteTableId": {
-          "Ref": "VpcIsolatedSubnet2RouteTable1D30AF7D",
+          "Ref": "VpcIsolatedSubnet2RouteTableBAB510EF",
         },
         "SubnetId": {
-          "Ref": "VpcIsolatedSubnet2Subnet16364B91",
+          "Ref": "VpcIsolatedSubnet2SubnetB479B99C",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "VpcIsolatedSubnet2Subnet16364B91": {
+    "VpcIsolatedSubnet2RouteTableBAB510EF": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Target/Vpc/Vpc/IsolatedSubnet2",
+          },
+        ],
+        "VpcId": {
+          "Ref": "VpcC3027511",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcIsolatedSubnet2SubnetB479B99C": {
       "Properties": {
         "AvailabilityZone": {
           "Fn::Select": [
@@ -602,16 +1141,16 @@ exports[`Snapshot test 1`] = `
           },
           {
             "Key": "Name",
-            "Value": "Target/Vpc/IsolatedSubnet2",
+            "Value": "Target/Vpc/Vpc/IsolatedSubnet2",
           },
         ],
         "VpcId": {
-          "Ref": "Vpc8378EB38",
+          "Ref": "VpcC3027511",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "VpcNatSecurityGroup8DA26EDC": {
+    "VpcNatSecurityGroup810E8F8C": {
       "Properties": {
         "GroupDescription": "Security Group for NAT instances",
         "SecurityGroupEgress": [
@@ -624,72 +1163,91 @@ exports[`Snapshot test 1`] = `
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Target/Vpc",
+            "Value": "Target/Vpc/Vpc",
           },
         ],
         "VpcId": {
-          "Ref": "Vpc8378EB38",
+          "Ref": "VpcC3027511",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "VpcNatSecurityGroupfromTargetBastionHostInstanceSecurityGroup57B1C702ALLTRAFFIC284A957B": {
+    "VpcNatSecurityGroupfromTargetAuroraBastionHostInstanceSecurityGroupC43FC128ALLTRAFFIC94591A74": {
       "Properties": {
-        "Description": "from TargetBastionHostInstanceSecurityGroup57B1C702:ALL TRAFFIC",
+        "Description": "from TargetAuroraBastionHostInstanceSecurityGroupC43FC128:ALL TRAFFIC",
         "GroupId": {
           "Fn::GetAtt": [
-            "VpcNatSecurityGroup8DA26EDC",
+            "VpcNatSecurityGroup810E8F8C",
             "GroupId",
           ],
         },
         "IpProtocol": "-1",
         "SourceSecurityGroupId": {
           "Fn::GetAtt": [
-            "BastionHostInstanceSecurityGroupE75D4274",
+            "AuroraBastionHostInstanceSecurityGroup3B0F6505",
             "GroupId",
           ],
         },
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
     },
-    "VpcPrivateSubnet1DefaultRouteBE02A9ED": {
+    "VpcNatSecurityGroupfromTargetDataPutterFargateServiceSecurityGroup11D3FDAAALLTRAFFIC76266153": {
+      "Properties": {
+        "Description": "from TargetDataPutterFargateServiceSecurityGroup11D3FDAA:ALL TRAFFIC",
+        "GroupId": {
+          "Fn::GetAtt": [
+            "VpcNatSecurityGroup810E8F8C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "-1",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "DataPutterFargateServiceSecurityGroup7A418CF0",
+            "GroupId",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "VpcPrivateSubnet1DefaultRouteF704DE9F": {
       "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
         "InstanceId": {
-          "Ref": "VpcPublicSubnet1NatInstance57B636B8",
+          "Ref": "VpcPublicSubnet1NatInstanceABFD54A8",
         },
         "RouteTableId": {
-          "Ref": "VpcPrivateSubnet1RouteTableB2C5B500",
+          "Ref": "VpcPrivateSubnet1RouteTable901BAEEE",
         },
       },
       "Type": "AWS::EC2::Route",
     },
-    "VpcPrivateSubnet1RouteTableAssociation70C59FA6": {
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcPrivateSubnet1RouteTableB2C5B500",
-        },
-        "SubnetId": {
-          "Ref": "VpcPrivateSubnet1Subnet536B997A",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcPrivateSubnet1RouteTableB2C5B500": {
+    "VpcPrivateSubnet1RouteTable901BAEEE": {
       "Properties": {
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Target/Vpc/PrivateSubnet1",
+            "Value": "Target/Vpc/Vpc/PrivateSubnet1",
           },
         ],
         "VpcId": {
-          "Ref": "Vpc8378EB38",
+          "Ref": "VpcC3027511",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "VpcPrivateSubnet1Subnet536B997A": {
+    "VpcPrivateSubnet1RouteTableAssociation2BC202CB": {
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VpcPrivateSubnet1RouteTable901BAEEE",
+        },
+        "SubnetId": {
+          "Ref": "VpcPrivateSubnet1Subnet67A4DBCB",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcPrivateSubnet1Subnet67A4DBCB": {
       "Properties": {
         "AvailabilityZone": {
           "Fn::Select": [
@@ -712,53 +1270,53 @@ exports[`Snapshot test 1`] = `
           },
           {
             "Key": "Name",
-            "Value": "Target/Vpc/PrivateSubnet1",
+            "Value": "Target/Vpc/Vpc/PrivateSubnet1",
           },
         ],
         "VpcId": {
-          "Ref": "Vpc8378EB38",
+          "Ref": "VpcC3027511",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "VpcPrivateSubnet2DefaultRoute060D2087": {
+    "VpcPrivateSubnet2DefaultRoute5FAC9901": {
       "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
         "InstanceId": {
-          "Ref": "VpcPublicSubnet2NatInstance746890A7",
+          "Ref": "VpcPublicSubnet2NatInstanceB36A9521",
         },
         "RouteTableId": {
-          "Ref": "VpcPrivateSubnet2RouteTableA678073B",
+          "Ref": "VpcPrivateSubnet2RouteTable1EA00C9D",
         },
       },
       "Type": "AWS::EC2::Route",
     },
-    "VpcPrivateSubnet2RouteTableA678073B": {
+    "VpcPrivateSubnet2RouteTable1EA00C9D": {
       "Properties": {
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Target/Vpc/PrivateSubnet2",
+            "Value": "Target/Vpc/Vpc/PrivateSubnet2",
           },
         ],
         "VpcId": {
-          "Ref": "Vpc8378EB38",
+          "Ref": "VpcC3027511",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "VpcPrivateSubnet2RouteTableAssociationA89CAD56": {
+    "VpcPrivateSubnet2RouteTableAssociationFA51927B": {
       "Properties": {
         "RouteTableId": {
-          "Ref": "VpcPrivateSubnet2RouteTableA678073B",
+          "Ref": "VpcPrivateSubnet2RouteTable1EA00C9D",
         },
         "SubnetId": {
-          "Ref": "VpcPrivateSubnet2Subnet3788AAA1",
+          "Ref": "VpcPrivateSubnet2SubnetC8EB537D",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "VpcPrivateSubnet2Subnet3788AAA1": {
+    "VpcPrivateSubnet2SubnetC8EB537D": {
       "Properties": {
         "AvailabilityZone": {
           "Fn::Select": [
@@ -781,33 +1339,33 @@ exports[`Snapshot test 1`] = `
           },
           {
             "Key": "Name",
-            "Value": "Target/Vpc/PrivateSubnet2",
+            "Value": "Target/Vpc/Vpc/PrivateSubnet2",
           },
         ],
         "VpcId": {
-          "Ref": "Vpc8378EB38",
+          "Ref": "VpcC3027511",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "VpcPublicSubnet1DefaultRoute3DA9E72A": {
+    "VpcPublicSubnet1DefaultRoute0F5C6C43": {
       "DependsOn": [
-        "VpcVPCGWBF912B6E",
+        "VpcVPCGW42EC8516",
       ],
       "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
         "GatewayId": {
-          "Ref": "VpcIGWD7BA715C",
+          "Ref": "VpcIGW488B0FEB",
         },
         "RouteTableId": {
-          "Ref": "VpcPublicSubnet1RouteTable6C95E38E",
+          "Ref": "VpcPublicSubnet1RouteTable431DD755",
         },
       },
       "Type": "AWS::EC2::Route",
     },
-    "VpcPublicSubnet1NatInstance57B636B8": {
+    "VpcPublicSubnet1NatInstanceABFD54A8": {
       "DependsOn": [
-        "VpcPublicSubnet1NatInstanceInstanceRole9D835E32",
+        "VpcPublicSubnet1NatInstanceInstanceRoleE102367C",
       ],
       "Properties": {
         "AvailabilityZone": {
@@ -819,7 +1377,7 @@ exports[`Snapshot test 1`] = `
           ],
         },
         "IamInstanceProfile": {
-          "Ref": "VpcPublicSubnet1NatInstanceInstanceProfileEE10C485",
+          "Ref": "VpcPublicSubnet1NatInstanceInstanceProfile65B2A5BB",
         },
         "ImageId": {
           "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61arm64C96584B6F00A464EAD1953AFF4B05118Parameter",
@@ -828,19 +1386,19 @@ exports[`Snapshot test 1`] = `
         "SecurityGroupIds": [
           {
             "Fn::GetAtt": [
-              "VpcNatSecurityGroup8DA26EDC",
+              "VpcNatSecurityGroup810E8F8C",
               "GroupId",
             ],
           },
         ],
         "SourceDestCheck": false,
         "SubnetId": {
-          "Ref": "VpcPublicSubnet1Subnet5C2D37C4",
+          "Ref": "VpcPublicSubnet1Subnet8E8DEDC0",
         },
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Target/Vpc/PublicSubnet1/NatInstance",
+            "Value": "Target/Vpc/Vpc/PublicSubnet1/NatInstance",
           },
         ],
         "UserData": {
@@ -857,17 +1415,17 @@ sudo service iptables save",
       },
       "Type": "AWS::EC2::Instance",
     },
-    "VpcPublicSubnet1NatInstanceInstanceProfileEE10C485": {
+    "VpcPublicSubnet1NatInstanceInstanceProfile65B2A5BB": {
       "Properties": {
         "Roles": [
           {
-            "Ref": "VpcPublicSubnet1NatInstanceInstanceRole9D835E32",
+            "Ref": "VpcPublicSubnet1NatInstanceInstanceRoleE102367C",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "VpcPublicSubnet1NatInstanceInstanceRole9D835E32": {
+    "VpcPublicSubnet1NatInstanceInstanceRoleE102367C": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -884,38 +1442,38 @@ sudo service iptables save",
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Target/Vpc/PublicSubnet1/NatInstance",
+            "Value": "Target/Vpc/Vpc/PublicSubnet1/NatInstance",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "VpcPublicSubnet1RouteTable6C95E38E": {
+    "VpcPublicSubnet1RouteTable431DD755": {
       "Properties": {
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Target/Vpc/PublicSubnet1",
+            "Value": "Target/Vpc/Vpc/PublicSubnet1",
           },
         ],
         "VpcId": {
-          "Ref": "Vpc8378EB38",
+          "Ref": "VpcC3027511",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "VpcPublicSubnet1RouteTableAssociation97140677": {
+    "VpcPublicSubnet1RouteTableAssociationBBCB7AA1": {
       "Properties": {
         "RouteTableId": {
-          "Ref": "VpcPublicSubnet1RouteTable6C95E38E",
+          "Ref": "VpcPublicSubnet1RouteTable431DD755",
         },
         "SubnetId": {
-          "Ref": "VpcPublicSubnet1Subnet5C2D37C4",
+          "Ref": "VpcPublicSubnet1Subnet8E8DEDC0",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "VpcPublicSubnet1Subnet5C2D37C4": {
+    "VpcPublicSubnet1Subnet8E8DEDC0": {
       "Properties": {
         "AvailabilityZone": {
           "Fn::Select": [
@@ -938,33 +1496,33 @@ sudo service iptables save",
           },
           {
             "Key": "Name",
-            "Value": "Target/Vpc/PublicSubnet1",
+            "Value": "Target/Vpc/Vpc/PublicSubnet1",
           },
         ],
         "VpcId": {
-          "Ref": "Vpc8378EB38",
+          "Ref": "VpcC3027511",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "VpcPublicSubnet2DefaultRoute97F91067": {
+    "VpcPublicSubnet2DefaultRouteD629179A": {
       "DependsOn": [
-        "VpcVPCGWBF912B6E",
+        "VpcVPCGW42EC8516",
       ],
       "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
         "GatewayId": {
-          "Ref": "VpcIGWD7BA715C",
+          "Ref": "VpcIGW488B0FEB",
         },
         "RouteTableId": {
-          "Ref": "VpcPublicSubnet2RouteTable94F7E489",
+          "Ref": "VpcPublicSubnet2RouteTable77FB35FC",
         },
       },
       "Type": "AWS::EC2::Route",
     },
-    "VpcPublicSubnet2NatInstance746890A7": {
+    "VpcPublicSubnet2NatInstanceB36A9521": {
       "DependsOn": [
-        "VpcPublicSubnet2NatInstanceInstanceRoleB3D21235",
+        "VpcPublicSubnet2NatInstanceInstanceRole65214B71",
       ],
       "Properties": {
         "AvailabilityZone": {
@@ -976,7 +1534,7 @@ sudo service iptables save",
           ],
         },
         "IamInstanceProfile": {
-          "Ref": "VpcPublicSubnet2NatInstanceInstanceProfile549888F0",
+          "Ref": "VpcPublicSubnet2NatInstanceInstanceProfileA3FF110C",
         },
         "ImageId": {
           "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61arm64C96584B6F00A464EAD1953AFF4B05118Parameter",
@@ -985,19 +1543,19 @@ sudo service iptables save",
         "SecurityGroupIds": [
           {
             "Fn::GetAtt": [
-              "VpcNatSecurityGroup8DA26EDC",
+              "VpcNatSecurityGroup810E8F8C",
               "GroupId",
             ],
           },
         ],
         "SourceDestCheck": false,
         "SubnetId": {
-          "Ref": "VpcPublicSubnet2Subnet691E08A3",
+          "Ref": "VpcPublicSubnet2SubnetA811849C",
         },
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Target/Vpc/PublicSubnet2/NatInstance",
+            "Value": "Target/Vpc/Vpc/PublicSubnet2/NatInstance",
           },
         ],
         "UserData": {
@@ -1014,17 +1572,17 @@ sudo service iptables save",
       },
       "Type": "AWS::EC2::Instance",
     },
-    "VpcPublicSubnet2NatInstanceInstanceProfile549888F0": {
+    "VpcPublicSubnet2NatInstanceInstanceProfileA3FF110C": {
       "Properties": {
         "Roles": [
           {
-            "Ref": "VpcPublicSubnet2NatInstanceInstanceRoleB3D21235",
+            "Ref": "VpcPublicSubnet2NatInstanceInstanceRole65214B71",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "VpcPublicSubnet2NatInstanceInstanceRoleB3D21235": {
+    "VpcPublicSubnet2NatInstanceInstanceRole65214B71": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -1041,38 +1599,38 @@ sudo service iptables save",
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Target/Vpc/PublicSubnet2/NatInstance",
+            "Value": "Target/Vpc/Vpc/PublicSubnet2/NatInstance",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "VpcPublicSubnet2RouteTable94F7E489": {
+    "VpcPublicSubnet2RouteTable77FB35FC": {
       "Properties": {
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Target/Vpc/PublicSubnet2",
+            "Value": "Target/Vpc/Vpc/PublicSubnet2",
           },
         ],
         "VpcId": {
-          "Ref": "Vpc8378EB38",
+          "Ref": "VpcC3027511",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "VpcPublicSubnet2RouteTableAssociationDD5762D8": {
+    "VpcPublicSubnet2RouteTableAssociation3AFE92E6": {
       "Properties": {
         "RouteTableId": {
-          "Ref": "VpcPublicSubnet2RouteTable94F7E489",
+          "Ref": "VpcPublicSubnet2RouteTable77FB35FC",
         },
         "SubnetId": {
-          "Ref": "VpcPublicSubnet2Subnet691E08A3",
+          "Ref": "VpcPublicSubnet2SubnetA811849C",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "VpcPublicSubnet2Subnet691E08A3": {
+    "VpcPublicSubnet2SubnetA811849C": {
       "Properties": {
         "AvailabilityZone": {
           "Fn::Select": [
@@ -1095,23 +1653,34 @@ sudo service iptables save",
           },
           {
             "Key": "Name",
-            "Value": "Target/Vpc/PublicSubnet2",
+            "Value": "Target/Vpc/Vpc/PublicSubnet2",
           },
         ],
         "VpcId": {
-          "Ref": "Vpc8378EB38",
+          "Ref": "VpcC3027511",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "VpcTargetS3EndpointForPrivate96E32ED1": {
+    "VpcVPCGW42EC8516": {
+      "Properties": {
+        "InternetGatewayId": {
+          "Ref": "VpcIGW488B0FEB",
+        },
+        "VpcId": {
+          "Ref": "VpcC3027511",
+        },
+      },
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+    },
+    "VpcVpcS3EndpointForPrivate54C54F5D": {
       "Properties": {
         "RouteTableIds": [
           {
-            "Ref": "VpcPrivateSubnet1RouteTableB2C5B500",
+            "Ref": "VpcPrivateSubnet1RouteTable901BAEEE",
           },
           {
-            "Ref": "VpcPrivateSubnet2RouteTableA678073B",
+            "Ref": "VpcPrivateSubnet2RouteTable1EA00C9D",
           },
         ],
         "ServiceName": {
@@ -1128,21 +1697,10 @@ sudo service iptables save",
         },
         "VpcEndpointType": "Gateway",
         "VpcId": {
-          "Ref": "Vpc8378EB38",
+          "Ref": "VpcC3027511",
         },
       },
       "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "VpcVPCGWBF912B6E": {
-      "Properties": {
-        "InternetGatewayId": {
-          "Ref": "VpcIGWD7BA715C",
-        },
-        "VpcId": {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::VPCGatewayAttachment",
     },
   },
   "Rules": {
