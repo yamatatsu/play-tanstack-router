@@ -21,7 +21,10 @@ services:
     ports:
       - 8000:8000
     environment:
-      DATABASE_URL: mysql://my-username:my-password@db:3306/mydb?sslmode=disable
+      DB_HOST: db
+      DB_DBNAME: mydb
+      DB_USERNAME: my-username
+      DB_PASSWORD: my-password
       CORS_ORIGIN: http://localhost:5173
     volumes:
       - ./packages/server-app:/usr/src/app/packages/server-app
@@ -29,6 +32,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      prisma-deploy:
+        condition: service_completed_successfully
 
   plc-fake:
     build:
@@ -36,7 +41,27 @@ services:
       dockerfile: Dockerfile
       target: plc-fake
     environment:
-      DATABASE_URL: mysql://my-username:my-password@db:3306/mydb?sslmode=disable
+      DB_HOST: db
+      DB_DBNAME: mydb
+      DB_USERNAME: my-username
+      DB_PASSWORD: my-password
+    depends_on:
+      db:
+        condition: service_healthy
+      prisma-deploy:
+        condition: service_completed_successfully
+
+  prisma-deploy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: plc-fake
+    environment:
+      DB_HOST: db
+      DB_DBNAME: mydb
+      DB_USERNAME: my-username
+      DB_PASSWORD: my-password
+    command: [pnpm, prisma, migrate, deploy]
     depends_on:
       db:
         condition: service_healthy
@@ -68,8 +93,8 @@ services:
       MYSQL_PASSWORD: my-password
     ports: 
       - 3306:3306
-    volumes:
-      - mysql-data:/var/lib/mysql
+    # volumes:
+    #   - mysql-data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       interval: 1s
