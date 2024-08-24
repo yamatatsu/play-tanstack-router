@@ -51,6 +51,8 @@ export class DataPutter extends Construct {
 				DB_USERNAME: ecs.Secret.fromSecretsManager(dbRootSecret, "username"),
 				DB_PASSWORD: ecs.Secret.fromSecretsManager(dbRootSecret, "password"),
 			},
+			// The npm library `tsx` needs to write to the filesystem.
+			readonlyRootFilesystem: false,
 		});
 
 		const dbMigrationContainer = taskDef.addContainer("DBMigration", {

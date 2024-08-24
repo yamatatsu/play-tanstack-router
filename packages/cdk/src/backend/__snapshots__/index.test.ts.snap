@@ -9,17 +9,23 @@ exports[`Snapshot test 1`] = `
         "Ref": "AuroraBastionHostC24C6193",
       },
     },
-    "DataPutterTestBastionBastionHostId5E151DC3": {
-      "Description": "Instance ID of the bastion host. Use this to connect via SSM Session Manager",
-      "Value": {
-        "Ref": "DataPutterTestBastion56D8C665",
-      },
-    },
   },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
       "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "GrafanaPdcAgentGcloudHostedGrafanaIdParameter24A27F08": {
+      "Default": "/grafana/gcloud-hosted-grafana-id",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "GrafanaPdcAgentPdcAgentClusterParameter9D368283": {
+      "Default": "/grafana/pdc-agent-cluster",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "GrafanaPdcAgentPdcAgentTokenParameter5BFE94C5": {
+      "Default": "/grafana/pdc-agent-token",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
     "SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61arm64C96584B6F00A464EAD1953AFF4B05118Parameter": {
@@ -271,6 +277,27 @@ exports[`Snapshot test 1`] = `
         "SourceSecurityGroupId": {
           "Fn::GetAtt": [
             "DataPutterFargateServiceSecurityGroup7A418CF0",
+            "GroupId",
+          ],
+        },
+        "ToPort": 3306,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "AuroraSecurityGroupfromTargetGrafanaPdcAgentFargateServiceSecurityGroup44C6C3C0330621DE5F8E": {
+      "Properties": {
+        "Description": "from TargetGrafanaPdcAgentFargateServiceSecurityGroup44C6C3C0:3306",
+        "FromPort": 3306,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "AuroraSecurityGroup467E7067",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "GrafanaPdcAgentFargateServiceSecurityGroupAA311E92",
             "GroupId",
           ],
         },
@@ -562,7 +589,7 @@ exports[`Snapshot test 1`] = `
             ],
             "Essential": true,
             "Image": {
-              "Fn::Sub": "\${AWS::AccountId}.dkr.ecr.\${AWS::Region}.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-\${AWS::AccountId}-\${AWS::Region}:a7a59bd1070df1b4ff32240f107aa24c96cb54ff2c3896ca4258106d030a56f3",
+              "Fn::Sub": "\${AWS::AccountId}.dkr.ecr.\${AWS::Region}.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-\${AWS::AccountId}-\${AWS::Region}:5b06692e4a1553d83f82719704a10599afb0da060c47c9e0a71f4751bc49e075",
             },
             "LogConfiguration": {
               "LogDriver": "awslogs",
@@ -577,6 +604,7 @@ exports[`Snapshot test 1`] = `
               },
             },
             "Name": "PlcFake",
+            "ReadonlyRootFilesystem": false,
             "Secrets": [
               {
                 "Name": "DB_HOST",
@@ -645,7 +673,7 @@ exports[`Snapshot test 1`] = `
             ],
             "Essential": false,
             "Image": {
-              "Fn::Sub": "\${AWS::AccountId}.dkr.ecr.\${AWS::Region}.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-\${AWS::AccountId}-\${AWS::Region}:a7a59bd1070df1b4ff32240f107aa24c96cb54ff2c3896ca4258106d030a56f3",
+              "Fn::Sub": "\${AWS::AccountId}.dkr.ecr.\${AWS::Region}.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-\${AWS::AccountId}-\${AWS::Region}:5b06692e4a1553d83f82719704a10599afb0da060c47c9e0a71f4751bc49e075",
             },
             "LogConfiguration": {
               "LogDriver": "awslogs",
@@ -884,86 +912,144 @@ exports[`Snapshot test 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "DataPutterTestBastion56D8C665": {
+    "GrafanaPdcAgentCluster73F762A4": {
+      "Type": "AWS::ECS::Cluster",
+    },
+    "GrafanaPdcAgentFargateService0798C719": {
       "DependsOn": [
-        "DataPutterTestBastionInstanceRoleDefaultPolicyEFD29050",
-        "DataPutterTestBastionInstanceRoleE0849638",
+        "GrafanaPdcAgentTaskDefinitionTaskRoleBEE79DE5",
       ],
       "Properties": {
-        "AvailabilityZone": {
-          "Fn::Select": [
-            0,
-            {
-              "Fn::GetAZs": "",
-            },
-          ],
+        "Cluster": {
+          "Ref": "GrafanaPdcAgentCluster73F762A4",
         },
-        "IamInstanceProfile": {
-          "Ref": "DataPutterTestBastionInstanceProfile84C6602F",
+        "DeploymentConfiguration": {
+          "Alarms": {
+            "AlarmNames": [],
+            "Enable": false,
+            "Rollback": false,
+          },
+          "DeploymentCircuitBreaker": {
+            "Enable": true,
+            "Rollback": false,
+          },
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50,
         },
-        "ImageId": {
-          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amikernel510hvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter",
+        "DeploymentController": {
+          "Type": "ECS",
         },
-        "InstanceType": "t3.nano",
-        "SecurityGroupIds": [
-          {
-            "Fn::GetAtt": [
-              "DataPutterFargateServiceSecurityGroup7A418CF0",
-              "GroupId",
+        "DesiredCount": 1,
+        "EnableECSManagedTags": false,
+        "LaunchType": "FARGATE",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "GrafanaPdcAgentFargateServiceSecurityGroupAA311E92",
+                  "GroupId",
+                ],
+              },
+            ],
+            "Subnets": [
+              {
+                "Ref": "VpcPrivateSubnet1Subnet67A4DBCB",
+              },
+              {
+                "Ref": "VpcPrivateSubnet2SubnetC8EB537D",
+              },
             ],
           },
-        ],
-        "SubnetId": {
-          "Ref": "VpcPrivateSubnet1Subnet67A4DBCB",
         },
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "BastionHost",
-          },
-        ],
-        "UserData": {
-          "Fn::Base64": "#!/bin/bash",
+        "TaskDefinition": {
+          "Ref": "GrafanaPdcAgentTaskDefinition3CF01727",
         },
       },
-      "Type": "AWS::EC2::Instance",
+      "Type": "AWS::ECS::Service",
     },
-    "DataPutterTestBastionInstanceProfile84C6602F": {
+    "GrafanaPdcAgentFargateServiceSecurityGroupAA311E92": {
+      "DependsOn": [
+        "GrafanaPdcAgentTaskDefinitionTaskRoleBEE79DE5",
+      ],
       "Properties": {
-        "Roles": [
+        "GroupDescription": "Target/GrafanaPdcAgent/FargateService/SecurityGroup",
+        "SecurityGroupEgress": [
           {
-            "Ref": "DataPutterTestBastionInstanceRoleE0849638",
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
           },
         ],
+        "VpcId": {
+          "Ref": "VpcC3027511",
+        },
       },
-      "Type": "AWS::IAM::InstanceProfile",
+      "Type": "AWS::EC2::SecurityGroup",
     },
-    "DataPutterTestBastionInstanceRoleDefaultPolicyEFD29050": {
+    "GrafanaPdcAgentTaskDefinition3CF01727": {
       "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "ssmmessages:*",
-                "ssm:UpdateInstanceInformation",
-                "ec2messages:*",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
+        "ContainerDefinitions": [
+          {
+            "Command": [
+              "-token",
+              {
+                "Ref": "GrafanaPdcAgentPdcAgentTokenParameter5BFE94C5",
+              },
+              "-cluster",
+              {
+                "Ref": "GrafanaPdcAgentPdcAgentClusterParameter9D368283",
+              },
+              "-gcloud-hosted-grafana-id",
+              {
+                "Ref": "GrafanaPdcAgentGcloudHostedGrafanaIdParameter24A27F08",
+              },
+            ],
+            "Essential": true,
+            "Image": "grafana/pdc-agent:0.0.32",
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "GrafanaPdcAgentTaskDefinitionPdcAgentLogGroup643F8816",
+                },
+                "awslogs-region": {
+                  "Ref": "AWS::Region",
+                },
+                "awslogs-stream-prefix": "PdcAgent",
+              },
             },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "DataPutterTestBastionInstanceRoleDefaultPolicyEFD29050",
-        "Roles": [
-          {
-            "Ref": "DataPutterTestBastionInstanceRoleE0849638",
+            "Name": "PdcAgent",
+            "ReadonlyRootFilesystem": false,
           },
         ],
+        "Cpu": "256",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "GrafanaPdcAgentTaskDefinitionExecutionRoleA9A98010",
+            "Arn",
+          ],
+        },
+        "Family": "TargetGrafanaPdcAgentTaskDefinition459802BB",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE",
+        ],
+        "RuntimePlatform": {
+          "CpuArchitecture": "ARM64",
+        },
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "GrafanaPdcAgentTaskDefinitionTaskRoleBEE79DE5",
+            "Arn",
+          ],
+        },
       },
-      "Type": "AWS::IAM::Policy",
+      "Type": "AWS::ECS::TaskDefinition",
     },
-    "DataPutterTestBastionInstanceRoleE0849638": {
+    "GrafanaPdcAgentTaskDefinitionExecutionRoleA9A98010": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -971,18 +1057,66 @@ exports[`Snapshot test 1`] = `
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": "ec2.amazonaws.com",
+                "Service": "ecs-tasks.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "Tags": [
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "GrafanaPdcAgentTaskDefinitionExecutionRoleDefaultPolicy373A1E66": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "GrafanaPdcAgentTaskDefinitionPdcAgentLogGroup643F8816",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GrafanaPdcAgentTaskDefinitionExecutionRoleDefaultPolicy373A1E66",
+        "Roles": [
           {
-            "Key": "Name",
-            "Value": "BastionHost",
+            "Ref": "GrafanaPdcAgentTaskDefinitionExecutionRoleA9A98010",
           },
         ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GrafanaPdcAgentTaskDefinitionPdcAgentLogGroup643F8816": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RetentionInDays": 90,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "GrafanaPdcAgentTaskDefinitionTaskRoleBEE79DE5": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
       },
       "Type": "AWS::IAM::Role",
     },
@@ -1204,6 +1338,25 @@ exports[`Snapshot test 1`] = `
         "SourceSecurityGroupId": {
           "Fn::GetAtt": [
             "DataPutterFargateServiceSecurityGroup7A418CF0",
+            "GroupId",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "VpcNatSecurityGroupfromTargetGrafanaPdcAgentFargateServiceSecurityGroup44C6C3C0ALLTRAFFICB3AF1AC4": {
+      "Properties": {
+        "Description": "from TargetGrafanaPdcAgentFargateServiceSecurityGroup44C6C3C0:ALL TRAFFIC",
+        "GroupId": {
+          "Fn::GetAtt": [
+            "VpcNatSecurityGroup810E8F8C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "-1",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "GrafanaPdcAgentFargateServiceSecurityGroupAA311E92",
             "GroupId",
           ],
         },

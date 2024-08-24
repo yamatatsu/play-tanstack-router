@@ -3,6 +3,7 @@ import type { Construct } from "constructs";
 import { Aurora } from "./aurora";
 import { Cognito } from "./cognito";
 import { DataPutter } from "./data-putter";
+import { GrafanaPdcAgent } from "./grafana-pdc-agent";
 import { Vpc } from "./vpc";
 
 type Props = cdk.StackProps & {
@@ -23,15 +24,21 @@ export class BackendStack extends cdk.Stack {
 			...props,
 			vpc: vpc.vpc,
 		});
+		vpc.allowOutboundFrom(aurora.bastion);
 
 		const dataPutter = new DataPutter(this, "DataPutter", {
 			...props,
 			vpc: vpc.vpc,
 			dbRootSecret: aurora.dbRootSecret,
 		});
-
-		vpc.allowOutboundFrom(aurora.bastion);
 		vpc.allowOutboundFrom(dataPutter.fargateConnections);
 		aurora.allowAccessDBFrom(dataPutter.fargateConnections);
+
+		const grafanaPdcAgent = new GrafanaPdcAgent(this, "GrafanaPdcAgent", {
+			...props,
+			vpc: vpc.vpc,
+		});
+		vpc.allowOutboundFrom(grafanaPdcAgent.fargateConnections);
+		aurora.allowAccessDBFrom(grafanaPdcAgent.fargateConnections);
 	}
 }

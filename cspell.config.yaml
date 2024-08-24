@@ -5,6 +5,7 @@ dictionaries: []
 words:
   - dbname
   - Fargate
+  - gcloud
   - tanstack
 ignoreWords: []
 import: []
